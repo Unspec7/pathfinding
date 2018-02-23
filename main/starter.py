@@ -17,6 +17,7 @@ def main(argv=None):
             raise Usage(msg)
 
         #launchAstarshithere()
+
     except Usage as err:
         print >> sys.stderr, err.msg
         print >> sys.stderr, "for help use --help"
