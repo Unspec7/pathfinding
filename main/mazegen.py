@@ -1,12 +1,17 @@
+import random
+
+
 class Graph(object):
     def __init__(self, size):
+        self.count = 0
         self.size = size
         self.all_nodes = [[None for x in range(size)] for y in range(size)]
+        self.unvisited_nodes = []
 
         for x in range(size):
             for y in range(size):
                 self.all_nodes[x][y] = Node(x, y)
-
+                self.unvisited_nodes.append([x, y])
 
     def represent(self):
         count = 1
@@ -34,8 +39,6 @@ class Node(object):
         self.f = self.g + self.h
         self.wall = False
         self.visited = False
-        # Parent is only used for DFS maze generation
-        self.parent = None
         # A list of coordinates of it's neighbors sored in a [x, y] position
         self.neighbors = getneighbors(self)
 
@@ -50,12 +53,49 @@ def getneighbors(node):
     return result
 
 
+def generatemaze():
+    firstrun = True
+    while len(my_graph.unvisited_nodes) > 0:
+        if firstrun:
+            firstrun = False
+            graph2maze()
+        else:
+            unvisit = my_graph.unvisited_nodes[0]
+            stack.append(my_graph.all_nodes[unvisit[0]][unvisit[1]])
+            graph2maze()
+
+
 def graph2maze():
-    # pick random neighbor code
     while len(stack) > 0:
-        stack.pop()
+        my_graph.count += 1
+        current = stack.pop()
+        # Check neighbors to see if they're visited or not
+        unvisitedneighbors = []
+        for items in current.neighbors:
+            neighbor = my_graph.all_nodes[items[0]][items[1]]
+            if not neighbor.visited:
+                unvisitedneighbors.append(neighbor)
 
+        # If it has unvisited neighbors, add those to a list
+        if len(unvisitedneighbors) != 0:
+            # Put old guy back in (since he had unvisited neighbors)
+            stack.append(current)
 
+            # Set new current
+            current = random.choice(unvisitedneighbors)
+            current.visited = True
+
+            # Remove from visited lists
+            #my_graph.unvisited_nodes.remove([current.x, current.y])
+
+            # Calculate wall chances
+            chance = random.randint(0, 101)
+            if chance <= 30:
+                # Make wall
+                current.wall = True
+            else:
+                # Push it to stack
+                stack.append(current)
 
 
 def getgraph():
@@ -65,6 +105,9 @@ def getgraph():
 my_graph = Graph(101)
 my_graph.all_nodes[0][0].wall = False
 my_graph.all_nodes[0][0].visited = True
-my_graph.all_nodes[0][0].parent = my_graph.all_nodes[0][0]
 stack = [my_graph.all_nodes[0][0]]
+my_graph.unvisited_nodes.remove([0, 0])
+graph2maze()
 my_graph.represent()
+
+
