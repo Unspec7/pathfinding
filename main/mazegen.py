@@ -11,13 +11,12 @@ class Graph(object):
         for node in self.all_nodes:
             if node is not None:
                 if count % 101 != 0:
-                    print("X", end = "")
+                    print("X", end="")
                 else:
                     print("X")
             else:
                 print("O")
             count += 1
-
 
 
 class Node(object):
