@@ -27,7 +27,6 @@ class Graph(object):
 
 class Node(object):
     def __init__(self, x, y):
-        #self.neighbors = getneighbors(self)
         self.x = x
         self.y = y
         self.g = 0
@@ -37,6 +36,8 @@ class Node(object):
         self.visited = False
         # Parent is only used for DFS maze generation
         self.parent = None
+        # A list of coordinates of it's neighbors sored in a [x, y] position
+        self.neighbors = getneighbors(self)
 
 
 def getneighbors(node):
@@ -45,7 +46,7 @@ def getneighbors(node):
     for direct in direction:
         neighbor = [node.x + direct[0], node.y + direct[1]]
         if 0 <= neighbor[0] < 101 and 0 <= neighbor[1] < 101:
-            result.append(my_graph.all_nodes[node.x + direct[0]][node.y + direct[1]])
+            result.append(neighbor)
     return result
 
 
