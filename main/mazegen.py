@@ -45,23 +45,25 @@ def getneighbors(node):
     for direct in direction:
         neighbor = [node.x + direct[0], node.y + direct[1]]
         if 0 <= neighbor[0] < 101 and 0 <= neighbor[1] < 101:
-
-            result.append(neighbor)
+            result.append(my_graph.all_nodes[node.x + direct[0]][node.y + direct[1]])
     return result
 
 
-def graph2maze(graph):
-    count = 1
-    graph.all_nodes[0].wall = False
-    graph.all_nodes[0].visited = True
-    graph.all_nodes[0].parent = graph.all_nodes[0]
-    my_neighbors = neighbors(graph.all_nodes[0])
+def graph2maze():
+    # pick random neighbor code
+    while len(stack) > 0:
+        stack.pop()
 
-    #pick random neighbor code
-    while count != 10201:
 
-        count += 1
+
+
+def getgraph():
+    return my_graph
 
 
 my_graph = Graph(101)
+my_graph.all_nodes[0][0].wall = False
+my_graph.all_nodes[0][0].visited = True
+my_graph.all_nodes[0][0].parent = my_graph.all_nodes[0][0]
+stack = [my_graph.all_nodes[0][0]]
 my_graph.represent()
