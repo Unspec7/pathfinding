@@ -9,16 +9,14 @@ class Graph(object):
     def represent(self):
         count = 0
         for node in self.all_nodes:
-            if node != None:
-                if count%102 != 0:
-                    print ("X", end = "")
+            if node is not None:
+                if count % 102 != 0:
+                    print("X", end = "")
                 else:
-                    print ("")
+                    print("")
             else:
-                print ("O")
+                print("O")
             count += 1
-
-        print (count)
 
 
 
@@ -29,6 +27,8 @@ class Node(object):
         self.g = 0
         self.h = 0
         self.f = self.g + self.h
+        self.wall = False
+        self.visited = False
 
 
 my_graph = Graph(101)
