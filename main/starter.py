@@ -1,3 +1,23 @@
+import pygame
+
+pygame.init()
+
+gameDisplay = pygame.display.set_mode((800,600))
+pygame.display.set_caption('Maze')
+clock = pygame.time.Clock()
+crash = False
+
+while not crash:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            crash = True
+    pygame.display.update()
+    clock.tick(30)
+
+pygame.quit()
+quit()
+
+
 """import sys
 import getopt
 
