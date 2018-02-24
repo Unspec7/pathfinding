@@ -7,13 +7,13 @@ class Graph(object):
                 self.all_nodes.append(Node(x, y))
 
     def represent(self):
-        count = 0
+        count = 1
         for node in self.all_nodes:
             if node is not None:
-                if count % 102 != 0:
+                if count % 101 != 0:
                     print("X", end = "")
                 else:
-                    print("")
+                    print("X")
             else:
                 print("O")
             count += 1
