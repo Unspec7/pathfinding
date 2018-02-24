@@ -9,13 +9,16 @@ class Graph(object):
     def represent(self):
         count = 1
         for node in self.all_nodes:
-            if node is not None:
-                if count % 101 != 0:
+            if count % 101 != 0:
+                if node.wall is False:
+                    print("O", end="")
+                elif node.wall is True:
                     print("X", end="")
-                else:
-                    print("X")
             else:
-                print("O")
+                if node.wall is False:
+                    print("O")
+                elif node.wall is True:
+                    print("X")
             count += 1
 
 
@@ -29,6 +32,20 @@ class Node(object):
         self.wall = False
         self.visited = False
 
+
+def graph2maze(graph):
+    graph.all_nodes[0].wall = False
+    graph.all_nodes[0].visited = True
+
+
+def neighbors(node):
+    direction = [[1, 0], [0, 1], [-1, 0], [0, -1]]
+    result = []
+    for direct in direction:
+        neighbor = [node[0] + direct[0], node[1] + direct[1]]
+        if 0 <= neighbor[0] < 20 and 0 <= neighbor[1] < 10:
+            result.append(neighbor)
+    return result
 
 my_graph = Graph(101)
 my_graph.represent()
