@@ -31,6 +31,20 @@ class Graph(object):
                         print("X")
                 count += 1
 
+    def diagnose(self):
+        done = True
+        for x in range(101):
+            for y in range(101):
+                if not self.master[x][y].visited:
+                    done = False
+
+        if done:
+            print("All nodes have been visited")
+        else:
+            print("There are unvisited nodes")
+        print("Ran " + str(self.count) + " times")
+
+
 
 class Node(object):
     def __init__(self, x, y):
@@ -65,10 +79,13 @@ def getneighbors(node):
 
 def generatemaze():
     """Generate a maze using DFS"""
+    count = 0
     while len(my_graph.unvisited) > 0:
         """While there are still unvisited nodes, keep going"""
         graph2maze()
+        count += 1
 
+    my_graph.count = count
     entrance_exit_generation()
 
 
@@ -80,14 +97,21 @@ def entrance_exit_generation():
     my_graph.master[0][0].wall = False
     my_graph.master[1][0].wall = False
     my_graph.master[0][1].wall = False
+    my_graph.master[1][1].wall = False
     my_graph.master[100][100].wall = False
     my_graph.master[100][99].wall = False
     my_graph.master[99][100].wall = False
+    my_graph.master[99][99].wall = False
 
 
 def graph2maze():
-    # Pick a random cell, set to visited and not a wall
-    coords = random.choice(my_graph.unvisited)
+    # Pick a random index
+    index = random.randint(0, len(my_graph.unvisited)-1)
+
+    # Use index to find coordinate tuple
+    coords = my_graph.unvisited[index]
+
+    # Use coordinate to set selected node
     current = my_graph.master[coords[0]][coords[1]]
     current.visited = True
     current.wall = False
@@ -95,8 +119,8 @@ def graph2maze():
     # Push to stack
     stack.append(current)
 
-    # Remove from unvisited list
-    my_graph.unvisited.remove([current.x, current.y])
+    # Remove from unvisited list using previously found index
+    my_graph.unvisited.pop(index)
 
     while len(stack) > 0:
         current = stack.pop()
@@ -121,7 +145,7 @@ def graph2maze():
 
             # Calculate wall chances
             chance = random.randint(0, 100)
-            if chance <= 30:
+            if chance <= 25:
                 # Make wall and don't push it back
                 current.wall = True
             else:
@@ -163,38 +187,29 @@ def DFSMaze(graph):
         DFSstack.append(curr)
 """
 
-def check():
-    done = True
-    for x in range(101):
-        for y in range(101):
-            if not my_graph.master[x][y].visited:
-                done = False
-
-    print(done)
-
-
-
 
 my_graph = Graph(101)
 
 stack = []
 generatemaze()
 my_graph.represent()
-check()
-mazes = []
+my_graph.diagnose()
 
-parent, cost = a_star_search(my_graph, Node(0,0), Node(30,30))
+"""
+parent, cost = a_star_search(my_graph, my_graph.master[0][0], my_graph.master[100][100])
 
 for key in parent:
     print (parent[key])
 for key in cost:
     print (cost[key])
 
+mazes = []
 mazes.append(my_graph)
     #print("Graph "+str(i)+" done")
 pickle_out = open("mazes.dat","wb")
 pickle.dump(mazes, pickle_out)
 pickle_out.close()
+"""
 
 
 
