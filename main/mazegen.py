@@ -1,6 +1,6 @@
 import random
 import pickle
-#import astar
+from astar import *
 
 
 class Graph(object):
@@ -14,6 +14,7 @@ class Graph(object):
             for y in range(size):
                 self.master[x][y] = Node(x, y)
                 self.unvisited.append([x, y])
+
     def represent(self):
         count = 1
         for x in range(self.size):
@@ -164,28 +165,38 @@ def DFSMaze(graph):
 """
 
 
+
+'''my_graph.all_nodes[0][0].wall = False
+my_graph.all_nodes[0][0].visited = True
+stack = [my_graph.all_nodes[0][0]]
+my_graph.unvisited_nodes.remove([0, 0])
+graph2maze()
+my_graph.represent()'''
+mazes = []
+for i in range (1,51):
+    my_graph = Graph(101)
+    DFSMaze(my_graph)
+    my_graph.represent()
+    mazes.append(my_graph)
+    print("Graph "+str(i)+" done")
+#for i in range (0,49):
 my_graph = Graph(101)
 
 stack = []
 generatemaze()
 my_graph.represent()
-mazes = []
+parent, cost = a_star_search(my_graph, Node(0,0), Node(30,30))
 
-# Brian stuff
-""""#for i in range (0,49):
-DFSMaze(my_graph)
-my_graph.represent()"""
+for key in parent:
+    print (parent[key])
+for key in cost:
+    print (cost[key])
 
 mazes.append(my_graph)
     #print("Graph "+str(i)+" done")
 pickle_out = open("mazes.dat","wb")
 pickle.dump(mazes, pickle_out)
 pickle_out.close()
-parent, cost = astar.a_star_search(my_graph, Node(0,0), Node(30,30))
 
-for key in parent:
-    print (parent[key])
-for key in cost:
-    print (cost[key])
 
 
