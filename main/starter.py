@@ -17,7 +17,6 @@ maze = []
 
 mazes = []
 
-maze = []
 gameDisplay = pygame.display.set_mode((displaywidth,displayheight))
 pygame.display.set_caption('Maze')
 clock = pygame.time.Clock()
@@ -45,13 +44,14 @@ def makemazes():
     mazes = []
     pygame.display.set_caption('Maze(Generating)')
     for i in range (0, 50):
+        pygame.event.get()
         my_graph = Graph(101)
         generatemaze(my_graph)
         #my_graph.represent()
         mazes.append(my_graph)
         print("Maze " + str(i+1) + " done")
-        setmaze(i)
 
+    setmaze(0)
     print("Done generating 50 mazes")
     pygame.display.set_caption('Maze')
     pickle_out = open("mazes.dat", "wb")
