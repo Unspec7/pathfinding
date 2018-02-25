@@ -1,6 +1,5 @@
 import pygame
 import pickle
-from mazegen import Graph
 
 pygame.init()
 displaywidth = 1280
@@ -72,10 +71,10 @@ def button(msg,x,y,w,h,ic,ac,action=None):
     smallText = pygame.font.SysFont("freesansbold",14)
     textSurf, textRect = text_objects(msg, smallText)
     textRect.center = ( (x+(w/2)), (y+(h/2)) )
-    gameDisplay.blit(textSurf, textRect
+    gameDisplay.blit(textSurf, textRect)
 
-def getMaze(i):
-    return mazes[i]
+'''def getMaze(i):
+    return mazes[i]'''
 
 """import sys
 import sys
