@@ -1,5 +1,7 @@
 import random
 import pickle
+import astar
+
 
 class Graph(object):
     def __init__(self, size):
@@ -63,7 +65,6 @@ def generatemaze():
             unvisit = my_graph.unvisited_nodes[0]
             stack.append(my_graph.all_nodes[unvisit[0]][unvisit[1]])
             graph2maze()
-
 
 def graph2maze():
     while len(stack) > 0:
