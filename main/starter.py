@@ -109,7 +109,6 @@ def button(msg, x, y, w, h, ic, ac, action=None):
     gameDisplay.blit(textSurf, textRect)
 
 
-
 while True:
     mouse = pygame.mouse.get_pos()
     for event in pygame.event.get():
@@ -140,6 +139,3 @@ while True:
 
     pygame.display.update()
     clock.tick(60)
-
-
-
