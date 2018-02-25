@@ -81,7 +81,7 @@ def generatemaze(graph):
     """Generate a maze using DFS"""
     count = 0
     stack = []
-    while len(my_graph.unvisited) > 0:
+    while len(graph.unvisited) > 0:
         """While there are still unvisited nodes, keep going"""
         graph2maze(stack, graph)
         count += 1
@@ -154,10 +154,6 @@ def graph2maze(stack, graph):
                 stack.append(current)
 
 
-def getgraph():
-    return my_graph
-
-
 """
 def DFSMaze(graph):
     DFSstack = []
@@ -188,11 +184,13 @@ def DFSMaze(graph):
         DFSstack.append(curr)
 """
 
-
+"""
 my_graph = Graph(101)
 generatemaze(my_graph)
 my_graph.represent()
 my_graph.diagnose()
+"""
+
 
 
 parent, cost = a_star_search(my_graph, my_graph.master[0][0], my_graph.master[100][100])
