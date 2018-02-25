@@ -1,5 +1,5 @@
 import random
-
+import pickle
 
 class Graph(object):
     def __init__(self, size):
@@ -101,13 +101,51 @@ def graph2maze():
 def getgraph():
     return my_graph
 
+def DFSMaze(graph):
+    DFSstack = []
+    reference = Graph(100)
+    curr = random.choice(random.choice(graph.all_nodes))
+    DFSstack.append(curr)
+    chance = 100
+    while len(DFSstack) != 0:
+        curr.visited = True
+        unvisited = []
+        for NB in curr.neighbors:
+            neighbor = graph.all_nodes[NB[0]][NB[1]]
+            if not neighbor.visited:
+                unvisited.append(neighbor)
 
-my_graph = Graph(101)
-my_graph.all_nodes[0][0].wall = False
+        if len(unvisited) == 0:
+            curr = DFSstack.pop()
+            chance = random.randint(0, 100)
+            continue
+        if chance < 30:
+            curr.wall = True
+            curr = DFSstack.pop()
+            chance = random.randint(0, 100)
+            continue
+        chance = random.randint(0, 100)
+        curr = random.choice(unvisited)
+        DFSstack.append(curr)
+
+
+
+
+
+
+'''my_graph.all_nodes[0][0].wall = False
 my_graph.all_nodes[0][0].visited = True
 stack = [my_graph.all_nodes[0][0]]
 my_graph.unvisited_nodes.remove([0, 0])
 graph2maze()
+my_graph.represent()'''
+mazes = []
+#for i in range (0,49):
+my_graph = Graph(101)
+DFSMaze(my_graph)
 my_graph.represent()
-
-
+mazes.append(my_graph)
+    #print("Graph "+str(i)+" done")
+pickle_out = open("mazes.dat","wb")
+pickle.dump(mazes, pickle_out)
+pickle_out.close()
