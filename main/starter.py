@@ -2,6 +2,7 @@ import pygame
 import sys
 import pickle
 from mazegen import *
+import time
 
 pygame.init()
 displaywidth = 1280
@@ -70,6 +71,7 @@ def mazebutton(msg, x, y, w, h, ic, ac, action=None):
 
         if click[0] == 1 and action != None:
             setmaze(action)
+            time.sleep(.5)
     else:
         pygame.draw.rect(gameDisplay, ic, (x, y, w, h))
 
@@ -98,6 +100,7 @@ def button(msg, x, y, w, h, ic, ac, action=None):
 
         if click[0] == 1 and action != None:
             action()
+            time.sleep(.5)
     else:
         pygame.draw.rect(gameDisplay, ic, (x, y, w, h))
 
@@ -105,6 +108,7 @@ def button(msg, x, y, w, h, ic, ac, action=None):
     textSurf, textRect = text_objects(msg, smallText)
     textRect.center = ((x + (w / 2)), (y + (h / 2)))
     gameDisplay.blit(textSurf, textRect)
+
 
 
 while True:
@@ -124,6 +128,8 @@ while True:
             for j in range(0, 100):
                 if maze.master[i][j].wall:
                     pygame.draw.rect(gameDisplay, black, (i*7, j*7, 6, 6), 0)
+
+
     for i in range(0, 25):
         mazebutton("Map "+str(i+1), 750, 30+i*25, 80, 20, gray, green, i)
         mazebutton("Map " + str(i+26), 850, 30 + i * 25, 80, 20, gray, green, i+25)
@@ -135,5 +141,6 @@ while True:
 
     pygame.display.update()
     clock.tick(60)
+
 
 
