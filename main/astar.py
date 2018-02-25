@@ -1,4 +1,5 @@
 from heapq import *
+import mazegen
 
 class Square(object):
     def __init__(self, x, y, valid):
@@ -20,26 +21,28 @@ def heuristic(curr, goal):
 
 def a_star_search(graph, source, sink):
     frontier = []
-    heappush(source, 0)
+    #heappush(source, 0)
+    heappush(frontier, source)
+    print (len(frontier))
     parent = {}
     cost_so_far = {}
     parent[source] = None
     cost_so_far[source] = 0
 
-    while not frontier.empty():
-        current = frontier.get()
+    #while not frontier.empty():
+    while len(frontier)>0:
+        current = heappop(frontier)
 
         if current == sink:
             break
-
-        for next in graph.neighbors(current):
+        for next in mazegen.getneighbors(current):
             new_cost = cost_so_far[current] + graph.cost(current, next)
+            print (new_cost)
             if next not in cost_so_far or new_cost < cost_so_far[next]:
                 cost_so_far[next] = new_cost
                 priority = new_cost + heuristic(sink, next)
                 frontier.put(next, priority)
                 parent[next] = current
-
     return parent, cost_so_far
 
 def a_star_backwards(graph, source, sink):

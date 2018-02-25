@@ -1,4 +1,5 @@
 import random
+import astar
 
 
 class Graph(object):
@@ -64,7 +65,6 @@ def generatemaze():
             stack.append(my_graph.all_nodes[unvisit[0]][unvisit[1]])
             graph2maze()
 
-
 def graph2maze():
     while len(stack) > 0:
         my_graph.count += 1
@@ -109,5 +109,11 @@ stack = [my_graph.all_nodes[0][0]]
 my_graph.unvisited_nodes.remove([0, 0])
 graph2maze()
 my_graph.represent()
+parent, cost = astar.a_star_search(my_graph, Node(0,0), Node(30,30))
+
+for key in parent:
+    print (parent[key])
+for key in cost:
+    print (cost[key])
 
 
