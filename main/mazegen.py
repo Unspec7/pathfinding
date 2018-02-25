@@ -77,42 +77,43 @@ def getneighbors(node):
     return result
 
 
-def generatemaze():
+def generatemaze(graph):
     """Generate a maze using DFS"""
     count = 0
+    stack = []
     while len(my_graph.unvisited) > 0:
         """While there are still unvisited nodes, keep going"""
-        graph2maze()
+        graph2maze(stack, graph)
         count += 1
 
-    my_graph.count = count
-    entrance_exit_generation()
+    graph.count = count
+    entrance_exit_generation(graph)
 
 
-def entrance_exit_generation():
+def entrance_exit_generation(graph):
     """
     Generate entrance and exit by making sure (0,0) and (100,100) aren't
     walls along with the two surround blocks
     """
-    my_graph.master[0][0].wall = False
-    my_graph.master[1][0].wall = False
-    my_graph.master[0][1].wall = False
-    my_graph.master[1][1].wall = False
-    my_graph.master[100][100].wall = False
-    my_graph.master[100][99].wall = False
-    my_graph.master[99][100].wall = False
-    my_graph.master[99][99].wall = False
+    graph.master[0][0].wall = False
+    graph.master[1][0].wall = False
+    graph.master[0][1].wall = False
+    graph.master[1][1].wall = False
+    graph.master[100][100].wall = False
+    graph.master[100][99].wall = False
+    graph.master[99][100].wall = False
+    graph.master[99][99].wall = False
 
 
-def graph2maze():
+def graph2maze(stack, graph):
     # Pick a random index
-    index = random.randint(0, len(my_graph.unvisited)-1)
+    index = random.randint(0, len(graph.unvisited)-1)
 
     # Use index to find coordinate tuple
-    coords = my_graph.unvisited[index]
+    coords = graph.unvisited[index]
 
     # Use coordinate to set selected node
-    current = my_graph.master[coords[0]][coords[1]]
+    current = graph.master[coords[0]][coords[1]]
     current.visited = True
     current.wall = False
 
@@ -120,14 +121,14 @@ def graph2maze():
     stack.append(current)
 
     # Remove from unvisited list using previously found index
-    my_graph.unvisited.pop(index)
+    graph.unvisited.pop(index)
 
     while len(stack) > 0:
         current = stack.pop()
         # Check neighbors to see if they're visited or not
         valid_neighbors = []
         for items in current.neighbors:
-            neighbor = my_graph.master[items[0]][items[1]]
+            neighbor = graph.master[items[0]][items[1]]
             if not neighbor.visited:
                 valid_neighbors.append(neighbor)
 
@@ -141,7 +142,7 @@ def graph2maze():
             current.visited = True
 
             # Remove from unvisited
-            my_graph.unvisited.remove([current.x, current.y])
+            graph.unvisited.remove([current.x, current.y])
 
             # Calculate wall chances
             chance = random.randint(0, 100)
@@ -189,9 +190,7 @@ def DFSMaze(graph):
 
 
 my_graph = Graph(101)
-
-stack = []
-generatemaze()
+generatemaze(my_graph)
 my_graph.represent()
 my_graph.diagnose()
 
