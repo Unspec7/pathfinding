@@ -1,35 +1,49 @@
 import random
 import pickle
-import astar
+from astar import a_star_search
 
 
 class Graph(object):
     def __init__(self, size):
         self.count = 0
         self.size = size
-        self.all_nodes = [[None for x in range(size)] for y in range(size)]
-        self.unvisited_nodes = []
+        self.master = [[None for x in range(size)] for y in range(size)]
+        self.unvisited = []
 
         for x in range(size):
             for y in range(size):
-                self.all_nodes[x][y] = Node(x, y)
-                self.unvisited_nodes.append([x, y])
+                self.master[x][y] = Node(x, y)
+                self.unvisited.append([x, y])
 
     def represent(self):
         count = 1
         for x in range(self.size):
             for y in range(self.size):
                 if count % 101 != 0:
-                    if self.all_nodes[x][y].wall is False:
+                    if self.master[x][y].wall is False:
                         print("O", end="")
-                    elif self.all_nodes[x][y].wall is True:
+                    elif self.master[x][y].wall is True:
                         print("X", end="")
                 else:
-                    if self.all_nodes[x][y].wall is False:
+                    if self.master[x][y].wall is False:
                         print("O")
-                    elif self.all_nodes[x][y].wall is True:
+                    elif self.master[x][y].wall is True:
                         print("X")
                 count += 1
+
+    def diagnose(self):
+        done = True
+        for x in range(101):
+            for y in range(101):
+                if not self.master[x][y].visited:
+                    done = False
+
+        if done:
+            print("All nodes have been visited")
+        else:
+            print("There are unvisited nodes")
+        print("Ran " + str(self.count) + " times")
+
 
 
 class Node(object):
@@ -44,6 +58,14 @@ class Node(object):
         # A list of coordinates of it's neighbors sored in a [x, y] position
         self.neighbors = getneighbors(self)
 
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def define_self(self):
+        print("Coords: (" + str(self.x) + ", " + str(self.y) + ")")
+        print("Is wall?: " + str(self.wall))
+        print("Visited?: " + str(self.visited))
+
 
 def getneighbors(node):
     direction = [[1, 0], [0, 1], [-1, 0], [0, -1]]
@@ -55,53 +77,88 @@ def getneighbors(node):
     return result
 
 
-def generatemaze():
-    firstrun = True
-    while len(my_graph.unvisited_nodes) > 0:
-        if firstrun:
-            firstrun = False
-            graph2maze()
-        else:
-            unvisit = my_graph.unvisited_nodes[0]
-            stack.append(my_graph.all_nodes[unvisit[0]][unvisit[1]])
-            graph2maze()
+def generatemaze(graph):
+    """Generate a maze using DFS"""
+    count = 0
+    stack = []
+    while len(my_graph.unvisited) > 0:
+        """While there are still unvisited nodes, keep going"""
+        graph2maze(stack, graph)
+        count += 1
 
-def graph2maze():
+    graph.count = count
+    entrance_exit_generation(graph)
+
+
+def entrance_exit_generation(graph):
+    """
+    Generate entrance and exit by making sure (0,0) and (100,100) aren't
+    walls along with the two surround blocks
+    """
+    graph.master[0][0].wall = False
+    graph.master[1][0].wall = False
+    graph.master[0][1].wall = False
+    graph.master[1][1].wall = False
+    graph.master[100][100].wall = False
+    graph.master[100][99].wall = False
+    graph.master[99][100].wall = False
+    graph.master[99][99].wall = False
+
+
+def graph2maze(stack, graph):
+    # Pick a random index
+    index = random.randint(0, len(graph.unvisited)-1)
+
+    # Use index to find coordinate tuple
+    coords = graph.unvisited[index]
+
+    # Use coordinate to set selected node
+    current = graph.master[coords[0]][coords[1]]
+    current.visited = True
+    current.wall = False
+
+    # Push to stack
+    stack.append(current)
+
+    # Remove from unvisited list using previously found index
+    graph.unvisited.pop(index)
+
     while len(stack) > 0:
-        my_graph.count += 1
         current = stack.pop()
         # Check neighbors to see if they're visited or not
-        unvisitedneighbors = []
+        valid_neighbors = []
         for items in current.neighbors:
-            neighbor = my_graph.all_nodes[items[0]][items[1]]
+            neighbor = graph.master[items[0]][items[1]]
             if not neighbor.visited:
-                unvisitedneighbors.append(neighbor)
+                valid_neighbors.append(neighbor)
 
         # If it has unvisited neighbors, add those to a list
-        if len(unvisitedneighbors) != 0:
+        if len(valid_neighbors) != 0:
             # Put old guy back in (since he had unvisited neighbors)
             stack.append(current)
 
             # Set new current
-            current = random.choice(unvisitedneighbors)
+            current = random.choice(valid_neighbors)
             current.visited = True
 
-            # Remove from visited lists
-            #my_graph.unvisited_nodes.remove([current.x, current.y])
+            # Remove from unvisited
+            graph.unvisited.remove([current.x, current.y])
 
             # Calculate wall chances
-            chance = random.randint(0, 101)
-            if chance <= 30:
-                # Make wall
+            chance = random.randint(0, 100)
+            if chance <= 25:
+                # Make wall and don't push it back
                 current.wall = True
             else:
-                # Push it to stack
+                # It's a corridor, so push it to stack
                 stack.append(current)
 
 
 def getgraph():
     return my_graph
 
+
+"""
 def DFSMaze(graph):
     DFSstack = []
     reference = Graph(100)
@@ -109,6 +166,7 @@ def DFSMaze(graph):
     DFSstack.append(curr)
     chance = 100
     while len(DFSstack) != 0:
+        my_graph.count += 1
         curr.visited = True
         unvisited = []
         for NB in curr.neighbors:
@@ -118,46 +176,39 @@ def DFSMaze(graph):
 
         if len(unvisited) == 0:
             curr = DFSstack.pop()
-            chance = random.randint(0, 100)
+            chance = random.randint(0, 101)
             continue
-        if chance < 30:
+        if chance <= 30:
             curr.wall = True
             curr = DFSstack.pop()
-            chance = random.randint(0, 100)
+            chance = random.randint(0, 101)
             continue
         chance = random.randint(0, 100)
         curr = random.choice(unvisited)
         DFSstack.append(curr)
+"""
 
 
-
-
-
-
-'''my_graph.all_nodes[0][0].wall = False
-my_graph.all_nodes[0][0].visited = True
-stack = [my_graph.all_nodes[0][0]]
-my_graph.unvisited_nodes.remove([0, 0])
-graph2maze()
-my_graph.represent()'''
-mazes = []
-#for i in range (0,49):
 my_graph = Graph(101)
-DFSMaze(my_graph)
+generatemaze(my_graph)
 my_graph.represent()
-#parent, cost = astar.a_star_search(my_graph, Node(0,0), Node(30,30))
-parent, cost = astar.a_star_search(my_graph, my_graph.all_nodes[0][0], my_graph.all_nodes[3][3])
+my_graph.diagnose()
+
+"""
+parent, cost = a_star_search(my_graph, my_graph.master[0][0], my_graph.master[100][100])
 
 for key in parent:
     print (parent[key])
 for key in cost:
     print (cost[key])
 
+mazes = []
 mazes.append(my_graph)
     #print("Graph "+str(i)+" done")
 pickle_out = open("mazes.dat","wb")
 pickle.dump(mazes, pickle_out)
 pickle_out.close()
+"""
 
 
 
