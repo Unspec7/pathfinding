@@ -35,8 +35,8 @@ def makemazes():
     global mazes
     mazes = []
     for i in range (1, 51):
-        my_graph = Graph(100)
-        generatemaze()
+        my_graph = Graph(101)
+        generatemaze(my_graph)
         my_graph.represent()
         mazes.append(my_graph)
         print("Graph "+str(i)+" done")
