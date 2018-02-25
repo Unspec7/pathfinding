@@ -123,7 +123,6 @@ while True:
                 if maze.master[i][j].wall:
                     pygame.draw.rect(gameDisplay, black, (i*7, j*7, 6, 6), 0)
 
-
     for i in range(0, 25):
         mazebutton("Map "+str(i+1), 750, 30+i*25, 80, 20, gray, green, i)
         mazebutton("Map " + str(i+26), 850, 30 + i * 25, 80, 20, gray, green, i+25)
