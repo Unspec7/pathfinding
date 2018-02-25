@@ -19,7 +19,7 @@ maze = []
 
 mazes = []
 
-gameDisplay = pygame.display.set_mode((displaywidth,displayheight))
+gameDisplay = pygame.display.set_mode((displaywidth, displayheight))
 pygame.display.set_caption('Maze')
 clock = pygame.time.Clock()
 
@@ -45,10 +45,6 @@ def makemazes():
     mazes = []
     pygame.display.set_caption('Maze(Generating)')
     for i in range(0, 50):
-        pygame.event.get()
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
         my_graph = Graph(101)
         generatemaze(my_graph)
         mazes.append(my_graph)
