@@ -1,6 +1,6 @@
 import random
 import pickle
-from astar import *
+import astar
 
 
 class Graph(object):
@@ -145,7 +145,8 @@ mazes = []
 my_graph = Graph(101)
 DFSMaze(my_graph)
 my_graph.represent()
-parent, cost = a_star_search(my_graph, Node(0,0), Node(30,30))
+#parent, cost = astar.a_star_search(my_graph, Node(0,0), Node(30,30))
+parent, cost = astar.a_star_search(my_graph, my_graph.all_nodes[0][0], my_graph.all_nodes[3][3])
 
 for key in parent:
     print (parent[key])
