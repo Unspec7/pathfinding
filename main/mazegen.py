@@ -1,6 +1,6 @@
 import random
 import pickle
-from astar import *
+from astar import a_star_search
 
 
 class Graph(object):
@@ -99,7 +99,6 @@ def graph2maze():
     my_graph.unvisited.remove([current.x, current.y])
 
     while len(stack) > 0:
-        my_graph.count += 1
         current = stack.pop()
         # Check neighbors to see if they're visited or not
         valid_neighbors = []
@@ -164,27 +163,26 @@ def DFSMaze(graph):
         DFSstack.append(curr)
 """
 
+def check():
+    done = True
+    for x in range(101):
+        for y in range(101):
+            if not my_graph.master[x][y].visited:
+                done = False
+
+    print(done)
 
 
-'''my_graph.all_nodes[0][0].wall = False
-my_graph.all_nodes[0][0].visited = True
-stack = [my_graph.all_nodes[0][0]]
-my_graph.unvisited_nodes.remove([0, 0])
-graph2maze()
-my_graph.represent()'''
-mazes = []
-for i in range (1,51):
-    my_graph = Graph(101)
-    DFSMaze(my_graph)
-    my_graph.represent()
-    mazes.append(my_graph)
-    print("Graph "+str(i)+" done")
-#for i in range (0,49):
+
+
 my_graph = Graph(101)
 
 stack = []
 generatemaze()
 my_graph.represent()
+check()
+mazes = []
+
 parent, cost = a_star_search(my_graph, Node(0,0), Node(30,30))
 
 for key in parent:

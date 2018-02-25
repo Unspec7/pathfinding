@@ -1,5 +1,4 @@
 from heapq import *
-import mazegen
 
 class Square(object):
     def __init__(self, x, y, valid):
