@@ -12,6 +12,7 @@ gray = (180, 180, 180)
 red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
+darkred = (180, 0, 0)
 maze = []
 
 mazes = []
@@ -21,6 +22,14 @@ gameDisplay = pygame.display.set_mode((displaywidth,displayheight))
 pygame.display.set_caption('Maze')
 clock = pygame.time.Clock()
 crash = False
+
+
+def forwardsastar():
+    print("do the thing")
+
+
+def backwardsastar( ):
+    print("do the other thing")
 
 
 def setmaze(i):
@@ -92,7 +101,7 @@ def button(msg, x, y, w, h, ic, ac, action=None):
 
 
 while not crash:
-
+    mouse = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             crash = True
@@ -102,13 +111,15 @@ while not crash:
             for j in range(0, 100):
                 if maze.master[i][j].wall:
                     pygame.draw.rect(gameDisplay, black, (i*7, j*7, 6, 6), 0)
-        mouse = pygame.mouse.get_pos()
     for i in range(0, 25):
         mazebutton("Map "+str(i+1), 750, 30+i*25, 80, 20, gray, green, i)
         mazebutton("Map " + str(i+26), 850, 30 + i * 25, 80, 20, gray, green, i+25)
 
     button("New Mazes", 1000, 100, 100, 30, gray, blue, makemazes)
     button("Load Mazes", 1000, 150, 100, 30, gray, blue, loadmazes)
+    button("Forwards A*", 1000, 400, 100, 50, red, darkred, forwardsastar)
+    button("Backwards A*", 1000, 500, 100, 50, red, darkred, backwardsastar)
+
     pygame.display.update()
     clock.tick(30)
 
