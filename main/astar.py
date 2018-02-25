@@ -68,3 +68,5 @@ def a_star_backwards(graph, source, sink):
                 parent[next] = current
 
     return parent, cost_so_far
+
+my_maze = []
