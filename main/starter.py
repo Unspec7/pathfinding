@@ -22,7 +22,6 @@ mazes = []
 gameDisplay = pygame.display.set_mode((displaywidth,displayheight))
 pygame.display.set_caption('Maze')
 clock = pygame.time.Clock()
-crash = False
 
 
 def forwardsastar():
@@ -34,7 +33,7 @@ def backwardsastar( ):
 
 
 def setmaze(i):
-    print("setting maze "+str(i))
+    print("Maze set to maze number "+str(i+1))
     global mazes
     if mazes:
         global maze
