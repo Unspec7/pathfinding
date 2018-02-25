@@ -13,6 +13,7 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 maze = []
+newMazeIndex = 0
 
 pickle_in = open("mazes.dat","rb")
 mazes = pickle.load(pickle_in)
@@ -21,6 +22,7 @@ gameDisplay = pygame.display.set_mode((displaywidth,displayheight))
 pygame.display.set_caption('Maze')
 clock = pygame.time.Clock()
 crash = False
+
 
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
@@ -35,18 +37,19 @@ while not crash:
             pygame.draw.rect(gameDisplay, ac, (x, y, w, h))
 
             if click[0] == 1 and action != None:
-                action()
+                setMaze(action)
         else:
             pygame.draw.rect(gameDisplay, ic, (x, y, w, h))
 
-        smallText = pygame.font.SysFont("freesansbold", 14)
+        smallText = pygame.font.SysFont("freesansbold", 20)
         textSurf, textRect = text_objects(msg, smallText)
         textRect.center = ((x + (w / 2)), (y + (h / 2)))
         gameDisplay.blit(textSurf, textRect)
 
 
-    def getMaze(i):
-        return mazes[i]
+    def setMaze(i):
+        global maze
+        maze = mazes[i]
 
 
     for event in pygame.event.get():
@@ -58,10 +61,9 @@ while not crash:
             if maze.all_nodes[i][j].wall:
                 pygame.draw.rect(gameDisplay, black, (i*7, j*7, 6, 6), 0)
     mouse = pygame.mouse.get_pos()
-    smallText = pygame.font.Font("freesansbold.ttf", 14)
     for i in range(0, 25):
-        button("Map "+str(i), 750, 30+i*25, 80, 20, gray, green, getMaze(i))
-
+        button("Map "+str(i+1), 750, 30+i*25, 80, 20, gray, green, i)
+        button("Map " + str(i+26), 850, 30 + i * 25, 80, 20, gray, green, i+25)
 
     pygame.display.update()
     clock.tick(30)

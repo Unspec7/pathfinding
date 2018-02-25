@@ -140,8 +140,8 @@ stack = [my_graph.all_nodes[0][0]]
 my_graph.unvisited_nodes.remove([0, 0])
 graph2maze()
 my_graph.represent()'''
-'''mazes = []
-for i in range (0,49):
+mazes = []
+for i in range (1,51):
     my_graph = Graph(101)
     DFSMaze(my_graph)
     my_graph.represent()
@@ -149,4 +149,4 @@ for i in range (0,49):
     print("Graph "+str(i)+" done")
 pickle_out = open("mazes.dat","wb")
 pickle.dump(mazes, pickle_out)
-pickle_out.close()'''
+pickle_out.close()
