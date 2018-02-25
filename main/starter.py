@@ -28,7 +28,7 @@ def forwardsastar():
     print("do the thing")
 
 
-def backwardsastar( ):
+def backwardsastar():
     print("do the other thing")
 
 
