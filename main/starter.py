@@ -43,13 +43,17 @@ def setmaze(i):
 def makemazes():
     global mazes
     mazes = []
-    for i in range (1, 51):
+    pygame.display.set_caption('Maze(Generating)')
+    for i in range (0, 50):
         my_graph = Graph(101)
         generatemaze(my_graph)
-        my_graph.represent()
+        #my_graph.represent()
         mazes.append(my_graph)
-        print("Graph "+str(i)+" done")
+        print("Maze " + str(i+1) + " done")
+        setmaze(i)
 
+    print("Done generating 50 mazes")
+    pygame.display.set_caption('Maze')
     pickle_out = open("mazes.dat", "wb")
     pickle.dump(mazes, pickle_out)
     pickle_out.close()
