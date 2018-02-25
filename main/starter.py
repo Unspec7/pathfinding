@@ -1,4 +1,5 @@
 import pygame
+import sys
 import pickle
 from mazegen import *
 
@@ -43,11 +44,13 @@ def makemazes():
     global mazes
     mazes = []
     pygame.display.set_caption('Maze(Generating)')
-    for i in range (0, 50):
+    for i in range(0, 50):
         pygame.event.get()
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
         my_graph = Graph(101)
         generatemaze(my_graph)
-        #my_graph.represent()
         mazes.append(my_graph)
         print("Maze " + str(i+1) + " done")
 
@@ -104,11 +107,17 @@ def button(msg, x, y, w, h, ic, ac, action=None):
     gameDisplay.blit(textSurf, textRect)
 
 
-while not crash:
+while True:
     mouse = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            crash = True
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
+
     gameDisplay.fill(white)
     if maze:
         for i in range(0, 100):
@@ -119,16 +128,12 @@ while not crash:
         mazebutton("Map "+str(i+1), 750, 30+i*25, 80, 20, gray, green, i)
         mazebutton("Map " + str(i+26), 850, 30 + i * 25, 80, 20, gray, green, i+25)
 
-    button("New Mazes", 1000, 100, 100, 30, gray, blue, makemazes)
+    button("Create Mazes", 1000, 100, 100, 30, gray, blue, makemazes)
     button("Load Mazes", 1000, 150, 100, 30, gray, blue, loadmazes)
     button("Forwards A*", 1000, 400, 100, 50, red, darkred, forwardsastar)
     button("Backwards A*", 1000, 500, 100, 50, red, darkred, backwardsastar)
 
     pygame.display.update()
-    clock.tick(30)
-
-
-pygame.quit()
-quit()
+    clock.tick(60)
 
 
