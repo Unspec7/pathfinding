@@ -192,14 +192,14 @@ my_graph.diagnose()
 """
 
 
-"""
+
 parent, cost = a_star_search(my_graph, my_graph.master[0][0], my_graph.master[100][100])
 
 for key in parent:
     print (parent[key])
 for key in cost:
     print (cost[key])
-
+"""
 mazes = []
 mazes.append(my_graph)
     #print("Graph "+str(i)+" done")
