@@ -13,7 +13,6 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 maze = []
-newMazeIndex = 0
 
 pickle_in = open("mazes.dat","rb")
 mazes = pickle.load(pickle_in)
