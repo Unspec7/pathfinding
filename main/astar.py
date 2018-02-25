@@ -61,6 +61,7 @@ def a_star_backwards(graph, source, sink):
             if next not in cost_so_far or new_cost < cost_so_far[next]:
                 cost_so_far[next] = new_cost
                 priority = new_cost + heuristic(source, next)
+                priority = new_cost + heuristic(sink, next)
                 frontier.put(next, priority)
                 parent[next] = current
 
