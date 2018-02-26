@@ -1,6 +1,5 @@
 import random
 import pickle
-from astar import a_star_search
 
 
 class Graph(object):
@@ -15,6 +14,11 @@ class Graph(object):
                 self.master[x][y] = Node(x, y, ident)
                 self.unvisited.append([x, y])
                 ident += 1
+    def __lt__(self, other):
+        '''if self.x == other.x:
+            return self.y < other.y
+        return self.x < other.x'''
+        return self < other
 
     def represent(self):
         count = 1
@@ -56,6 +60,7 @@ class Node(object):
         self.f = self.g + self.h
         self.wall = False
         self.visited = False
+        self.searchvisit = False
         # A list of coordinates of it's neighbors sored in a [x, y] position
         self.neighbors = getneighbors(self)
         self.id = ident
@@ -195,12 +200,7 @@ my_graph.diagnose()
 
 
 
-parent, cost = a_star_search(my_graph, my_graph.master[0][0], my_graph.master[3][3])
 
-for key in parent:
-    print (key, parent[key].x, parent[key].y)
-for key in cost:
-    print (key, cost[key])
 """
 mazes = []
 mazes.append(my_graph)

@@ -2,7 +2,7 @@ import os
 import time
 import ctypes
 import pygame
-
+from astar import *
 from mazegen import *
 
 pygame.init()
@@ -26,6 +26,8 @@ pygame.display.set_caption('Maze')
 clock = pygame.time.Clock()
 
 def forwardsastar():
+    global maze
+    a_star_search(maze)
     print("do the thing")
 
 
@@ -137,6 +139,8 @@ while True:
             for j in range(0, 101):
                 if maze.master[i][j].wall:
                     pygame.draw.rect(gameDisplay, black, (i*7, j*7, 6, 6), 0)
+                if maze.master[i][j].f>0:
+                    pygame.draw.rect(gameDisplay, green, (i*7, j*7, 6, 6), 0)
 
     for i in range(0, 25):
         mazebutton("Map "+str(i+1), 750, 30+i*25, 80, 20, gray, green, i)
