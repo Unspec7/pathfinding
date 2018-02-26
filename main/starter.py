@@ -29,7 +29,7 @@ maze = []
 
 mazes = []
 
-pygame.display.set_caption('Maze')
+pygame.display.set_caption('Maze(No mazes loaded)')
 
 clock = pygame.time.Clock()
 
@@ -50,6 +50,7 @@ def forwardsastar():
             sink = maze.master[100][100]
             pygame.display.set_caption('Maze(Path found, updating display...)')
             update_image(maze.path_found)
+            pygame.display.set_caption('Maze(Path found)')
     else:
         pygame.display.set_caption('Maze(No mazes available)')
 
@@ -70,18 +71,19 @@ def backwardsastar():
             sink = maze.master[0][0]
             pygame.display.set_caption('Maze(Path found, updating display...)')
             update_image(maze.path_found)
+            pygame.display.set_caption('Maze(Path found)')
     else:
         pygame.display.set_caption('Maze(No mazes available)')
 
 
 def setmaze(maze_number):
-    print("Maze set to maze number " + str(maze_number + 1))
     global mazes
     if mazes:
         global maze
         maze = mazes[maze_number]
-        pygame.display.set_caption('Maze(Maze number ' + str(maze_number + 1) + ')')
+        pygame.display.set_caption('Maze(Updating display...)')
         update_image(maze.path_found)
+        pygame.display.set_caption('Maze(Maze number ' + str(maze_number + 1) + ')')
     else:
         pygame.display.set_caption('Maze(No mazes available)')
 
@@ -129,6 +131,7 @@ def text_objects(text, font):
 
 
 def loadmazes():
+    pygame.display.set_caption('Maze(Loading mazes...)')
     try:
         pickle_in = open("mazes.dat", "rb")
         global mazes
