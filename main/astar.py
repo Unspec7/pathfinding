@@ -51,8 +51,8 @@ def a_star_search(graph, source, sink):
     heappush(frontier, source)
     parent = {}
     cost_so_far = {}
-    parent[source] = None
-    cost_so_far[source] = 0
+    parent[str(source)] = None
+    cost_so_far[str(source)] = 0
     count = 0
 
     #while not frontier.empty():
@@ -60,20 +60,20 @@ def a_star_search(graph, source, sink):
         current = heappop(frontier)
         if current == sink:
             break
-
+        print((str(source)))
         for next in getneighbors(current):
             if count == 10201:
                 break
-            new_cost = cost_so_far[current] + heuristic(current, sink)
+            new_cost = cost_so_far[str(current)] + heuristic(current, sink)
             current.f = new_cost
-            if next not in cost_so_far or new_cost < cost_so_far[next]:
-                cost_so_far[next] = new_cost
+            if next not in cost_so_far or new_cost < cost_so_far[str(next)]:
+                cost_so_far[str(next)] = new_cost
                 priority = new_cost + heuristic(sink, next)
                 next.f = priority
                 #frontier.put(next, priority)
-                cost_so_far[next] = priority
+                cost_so_far[str(next)] = priority
                 heappush(frontier, next)
-                parent[next] = current
+                parent[str(next)] = current
                 count += 1
     return parent, cost_so_far
 
