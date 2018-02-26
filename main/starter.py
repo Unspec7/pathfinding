@@ -1,6 +1,8 @@
 import pygame
+import sys
 import pickle
 from mazegen import *
+import time
 
 pygame.init()
 displaywidth = 1280
@@ -12,19 +14,26 @@ gray = (180, 180, 180)
 red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
+darkred = (180, 0, 0)
 maze = []
 
 mazes = []
 
-maze = []
-gameDisplay = pygame.display.set_mode((displaywidth,displayheight))
+gameDisplay = pygame.display.set_mode((displaywidth, displayheight))
 pygame.display.set_caption('Maze')
 clock = pygame.time.Clock()
-crash = False
+
+
+def forwardsastar():
+    print("do the thing")
+
+
+def backwardsastar():
+    print("do the other thing")
 
 
 def setmaze(i):
-    print("setting maze "+str(i))
+    print("Maze set to maze number "+str(i+1))
     global mazes
     if mazes:
         global maze
@@ -34,13 +43,16 @@ def setmaze(i):
 def makemazes():
     global mazes
     mazes = []
-    for i in range (1, 51):
+    pygame.display.set_caption('Maze(Generating)')
+    for i in range(0, 50):
         my_graph = Graph(101)
         generatemaze(my_graph)
-        my_graph.represent()
         mazes.append(my_graph)
-        print("Graph "+str(i)+" done")
+        print("Maze " + str(i+1) + " done")
 
+    setmaze(0)
+    print("Done generating 50 mazes")
+    pygame.display.set_caption('Maze')
     pickle_out = open("mazes.dat", "wb")
     pickle.dump(mazes, pickle_out)
     pickle_out.close()
@@ -54,6 +66,7 @@ def mazebutton(msg, x, y, w, h, ic, ac, action=None):
 
         if click[0] == 1 and action != None:
             setmaze(action)
+            time.sleep(.5)
     else:
         pygame.draw.rect(gameDisplay, ic, (x, y, w, h))
 
@@ -82,6 +95,7 @@ def button(msg, x, y, w, h, ic, ac, action=None):
 
         if click[0] == 1 and action != None:
             action()
+            time.sleep(.5)
     else:
         pygame.draw.rect(gameDisplay, ic, (x, y, w, h))
 
@@ -91,29 +105,32 @@ def button(msg, x, y, w, h, ic, ac, action=None):
     gameDisplay.blit(textSurf, textRect)
 
 
-while not crash:
-
+while True:
+    mouse = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            crash = True
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
+
     gameDisplay.fill(white)
     if maze:
         for i in range(0, 100):
             for j in range(0, 100):
                 if maze.master[i][j].wall:
                     pygame.draw.rect(gameDisplay, black, (i*7, j*7, 6, 6), 0)
-        mouse = pygame.mouse.get_pos()
+
     for i in range(0, 25):
         mazebutton("Map "+str(i+1), 750, 30+i*25, 80, 20, gray, green, i)
         mazebutton("Map " + str(i+26), 850, 30 + i * 25, 80, 20, gray, green, i+25)
 
-    button("New Mazes", 1000, 100, 100, 30, gray, blue, makemazes)
+    button("Create Mazes", 1000, 100, 100, 30, gray, blue, makemazes)
     button("Load Mazes", 1000, 150, 100, 30, gray, blue, loadmazes)
+    button("Forwards A*", 1000, 400, 100, 50, red, darkred, forwardsastar)
+    button("Backwards A*", 1000, 500, 100, 50, red, darkred, backwardsastar)
+
     pygame.display.update()
-    clock.tick(30)
-
-
-pygame.quit()
-quit()
-
-
+    clock.tick(60)
