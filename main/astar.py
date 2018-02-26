@@ -14,22 +14,9 @@ def a_star_search(graph):
     source.h = heuristic(source, sink)
     source.f = source.h
     openlist = []
-    closedlist = []
-    # heappush(source, 0)
     heappush(openlist, source)
-
-    parent = {}
-    cost_so_far = {}
-    parent[source.id] = None
-    cost_so_far[source.id] = 0
-    count = 0
-
-    # While not frontier.empty():
     while len(openlist) > 0:
-        count += 1
-        sorted(openlist, key=lambda node: node.f, reverse=True)
         current = heappop(openlist)
-        closedlist.append(current)
         current.searchvisit = True
         if current == sink:
             graph.path_found = True
@@ -38,14 +25,15 @@ def a_star_search(graph):
             neighbor = graph.master[items[0]][items[1]]
             if neighbor.wall:
                 continue
-            if neighbor not in closedlist and neighbor not in openlist:
+
+            '''don't need to check to see if openlist has shorter g value because g is always 1'''
+
+            if not neighbor.searchvisit and neighbor not in openlist:
                 neighbor.parent = current
                 neighbor.h = heuristic(neighbor, sink)
                 neighbor.g = current.g+1
                 neighbor.f = neighbor.g+neighbor.h
                 heappush(openlist, neighbor)
-                heappush(openlist, neighbor)
-    print("Nodes expanded: " + str(count))
     if sink.searchvisit is not True:
         graph.path_found = False
     return graph
@@ -53,27 +41,14 @@ def a_star_search(graph):
 
 def a_star_backwards(graph):
     graph.clean = False
-    source = graph.master[100][100]
-    sink = graph.master[0][0]
+    source = graph.master[0][10]
+    sink = graph.master[100][100]
     source.h = heuristic(source, sink)
     source.f = source.h
     openlist = []
-    closedlist = []
-    # heappush(source, 0)
     heappush(openlist, source)
-
-    parent = {}
-    cost_so_far = {}
-    parent[source.id] = None
-    cost_so_far[source.id] = 0
-    count = 0
-
-    # While not frontier.empty():
     while len(openlist) > 0:
-        count += 1
-        sorted(openlist, key=lambda node: node.f, reverse=True)
         current = heappop(openlist)
-        closedlist.append(current)
         current.searchvisit = True
         if current == sink:
             graph.path_found = True
@@ -82,14 +57,13 @@ def a_star_backwards(graph):
             neighbor = graph.master[items[0]][items[1]]
             if neighbor.wall:
                 continue
-            if neighbor not in closedlist and neighbor not in openlist:
+            if not neighbor.searchvisit and neighbor not in openlist:
                 neighbor.parent = current
                 neighbor.h = heuristic(neighbor, sink)
-                neighbor.g = current.g + 1
-                neighbor.f = neighbor.g + neighbor.h
+                neighbor.g = current.g+1
+                neighbor.f = neighbor.g+neighbor.h
                 heappush(openlist, neighbor)
                 heappush(openlist, neighbor)
-    print("Nodes expanded: " + str(count))
     if sink.searchvisit is not True:
         graph.path_found = False
     return graph
