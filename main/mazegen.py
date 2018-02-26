@@ -186,21 +186,21 @@ def DFSMaze(graph):
         DFSstack.append(curr)
 """
 
-"""
+
 my_graph = Graph(101)
 generatemaze(my_graph)
 my_graph.represent()
 my_graph.diagnose()
-"""
 
 
 
-"""parent, cost = a_star_search(my_graph, my_graph.master[0][0], my_graph.master[100][100])
+
+parent, cost = a_star_search(my_graph, my_graph.master[0][0], my_graph.master[3][3])
 
 for key in parent:
-    print (parent[key])
+    print (key, parent[key].x, parent[key].y)
 for key in cost:
-    print (cost[key])"""
+    print (key, cost[key])
 """
 mazes = []
 mazes.append(my_graph)
