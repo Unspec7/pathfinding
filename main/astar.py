@@ -1,7 +1,7 @@
 from heapq import *
 
 class Node(object):
-    def __init__(self, x, y):
+    def __init__(self, x, y, ident):
         self.x = x
         self.y = y
         self.g = 0
@@ -9,6 +9,7 @@ class Node(object):
         self.f = self.g + self.h
         self.wall = False
         self.visited = False
+        self.id = ident
         # A list of coordinates of it's neighbors sored in a [x, y] position
         #self.neighbors = getneighbors(self)
 
@@ -22,7 +23,7 @@ def getneighbors(node):
     direction = [[1, 0], [0, 1], [-1, 0], [0, -1]]
     result = []
     for direct in direction:
-        neighbor = Node(node.x + direct[0], node.y + direct[1])
+        neighbor = Node(node.x + direct[0], node.y + direct[1], node.id)
         if 0 <= neighbor.x < 101 and 0 <= neighbor.y < 101:
             result.append(neighbor)
     return result
@@ -51,8 +52,8 @@ def a_star_search(graph, source, sink):
     heappush(frontier, source)
     parent = {}
     cost_so_far = {}
-    parent[str(source)] = None
-    cost_so_far[str(source)] = 0
+    parent[source.id] = None
+    cost_so_far[source.id] = 0
     count = 0
 
     #while not frontier.empty():
@@ -60,20 +61,19 @@ def a_star_search(graph, source, sink):
         current = heappop(frontier)
         if current == sink:
             break
-        print((str(source)))
         for next in getneighbors(current):
             if count == 10201:
                 break
-            new_cost = cost_so_far[str(current)] + heuristic(current, sink)
+            new_cost = cost_so_far[current.id] + heuristic(current, sink)
             current.f = new_cost
-            if next not in cost_so_far or new_cost < cost_so_far[str(next)]:
-                cost_so_far[str(next)] = new_cost
+            if next not in cost_so_far or new_cost < cost_so_far[next.id]:
+                cost_so_far[next.id] = new_cost
                 priority = new_cost + heuristic(sink, next)
                 next.f = priority
                 #frontier.put(next, priority)
-                cost_so_far[str(next)] = priority
+                cost_so_far[next.id] = priority
                 heappush(frontier, next)
-                parent[str(next)] = current
+                parent[next.id] = current
                 count += 1
     return parent, cost_so_far
 
