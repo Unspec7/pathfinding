@@ -39,6 +39,9 @@ class Graph(object):
                 for y in range(self.size):
                     self.master.searchvisit = False
                     self.master.parent = []
+                    self.master.g = 0
+                    self.master.h = 0
+                    self.master.f = self.master.g + self.master.h
 
     def diagnose(self):
         done = True
