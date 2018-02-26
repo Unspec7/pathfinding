@@ -9,6 +9,7 @@ def heuristic(curr, goal):
 
 def a_star_search(graph):
     graph.need_clean = True
+    graph.path_found = False
     source = graph.master[0][0]
     sink = graph.master[100][100]
     source.h = heuristic(source, sink)
@@ -46,6 +47,7 @@ def a_star_search(graph):
 
 def a_star_backwards(graph):
     graph.need_clean = True
+    graph.path_found = False
     source = graph.master[100][100]
     sink = graph.master[0][0]
     source.h = heuristic(source, sink)
@@ -78,8 +80,10 @@ def a_star_backwards(graph):
         graph.path_found = False
     return graph
 
+
 def adaptive_a_star_search(graph):
     graph.need_clean = True
+    graph.path_found = False
     source = graph.master[0][0]
     sink = graph.master[100][100]
     source.h = heuristic(source, sink)
