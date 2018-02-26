@@ -9,8 +9,6 @@ pygame.init()
 user32 = ctypes.windll.user32
 user32.SetProcessDPIAware()
 displaywidth, displayheight = int(user32.GetSystemMetrics(0)*.75), int(user32.GetSystemMetrics(1)*.75)
- #= 1280
- #= 720
 gameDisplay = pygame.display.set_mode((displaywidth, displayheight), pygame.RESIZABLE)
 
 black = (0, 0, 0)
