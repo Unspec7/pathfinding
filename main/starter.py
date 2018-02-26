@@ -1,14 +1,17 @@
 import os
 import time
-
+import ctypes
 import pygame
 
 from mazegen import *
 
 pygame.init()
-displaywidth = 1280
-displayheight = 720
-gameDisplay = pygame.display.set_mode((displaywidth, displayheight))
+user32 = ctypes.windll.user32
+user32.SetProcessDPIAware()
+displaywidth, displayheight = int(user32.GetSystemMetrics(0)*.75), int(user32.GetSystemMetrics(1)*.75)
+ #= 1280
+ #= 720
+gameDisplay = pygame.display.set_mode((displaywidth, displayheight), pygame.RESIZABLE)
 
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -24,7 +27,6 @@ mazes = []
 pygame.display.set_caption('Maze')
 clock = pygame.time.Clock()
 
-
 def forwardsastar():
     print("do the thing")
 
@@ -39,6 +41,9 @@ def setmaze(maze_number):
     if mazes:
         global maze
         maze = mazes[maze_number]
+        pygame.display.set_caption('Maze(Maze number ' + str(maze_number + 1) + ')')
+    else:
+        pygame.display.set_caption('Maze(No mazes available)')
 
 
 def makemazes():
@@ -114,20 +119,24 @@ def button(msg, x, y, w, h, ic, ac, action=None):
 while True:
     done = False
     mouse = pygame.mouse.get_pos()
+    gameDisplay.fill(white)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 done = True
+        elif event.type == pygame.VIDEORESIZE:
+            gameDisplay = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+            gameDisplay.fill(white)
+            pygame.display.update()
 
     if done:
         break
 
-    gameDisplay.fill(white)
     if maze:
-        for i in range(0, 100):
-            for j in range(0, 100):
+        for i in range(0, 101):
+            for j in range(0, 101):
                 if maze.master[i][j].wall:
                     pygame.draw.rect(gameDisplay, black, (i*7, j*7, 6, 6), 0)
 
@@ -135,7 +144,7 @@ while True:
         mazebutton("Map "+str(i+1), 750, 30+i*25, 80, 20, gray, green, i)
         mazebutton("Map " + str(i+26), 850, 30 + i * 25, 80, 20, gray, green, i+25)
 
-    button("Create Mazes", 1000, 100, 100, 30, gray, blue, makemazes)
+    button("Generate Mazes", 1000, 100, 100, 30, gray, blue, makemazes)
     button("Load Mazes", 1000, 150, 100, 30, gray, blue, loadmazes)
     button("Forwards A*", 1000, 400, 100, 50, red, darkred, forwardsastar)
     button("Backwards A*", 1000, 500, 100, 50, red, darkred, backwardsastar)
