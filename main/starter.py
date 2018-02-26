@@ -16,6 +16,7 @@ if displaywidth < 1440 or displayheight < 810:
     displayheight = 810
 
 gameDisplay = pygame.display.set_mode((displaywidth, displayheight))
+
 print(pygame.font.get_fonts())
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -24,9 +25,9 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 darkred = (180, 0, 0)
+maze_area = pygame.draw.rect(gameDisplay, red, (0, 0, 808, 808), 0)
 sink = []
 maze = []
-
 mazes = []
 
 pygame.display.set_caption('Maze(No mazes loaded)')
@@ -39,9 +40,11 @@ def forwardsastar():
     if maze:
         pygame.display.set_caption('Maze(Running forward A*)')
         if maze.need_clean:
+            print("Cleaning")
+            maze.clean()
             a_star_search(maze)
         else:
-            maze.clean()
+            print("Didn't need cleaning")
             a_star_search(maze)
         if maze.path_found is False:
             pygame.display.set_caption('Maze(No possible path)')
@@ -60,9 +63,11 @@ def backwardsastar():
     if mazes:
         pygame.display.set_caption('Maze(Running reverse A*)')
         if maze.need_clean:
+            print("Cleaning")
+            maze.clean()
             a_star_backwards(maze)
         else:
-            maze.clean()
+            print("Didn't need cleaning")
             a_star_backwards(maze)
         if maze.path_found is False:
             pygame.display.set_caption('Maze(No possible path)')
@@ -92,6 +97,7 @@ def makemazes():
     global mazes
     mazes = []
     pygame.display.set_caption('Maze(Generating)')
+    gameDisplay.fill(white, maze_area)
     for x in range(0, 50):
         # So it doesn't go into not responding mode
         pygame.event.get()
@@ -161,8 +167,7 @@ def button(msg, x, y, w, h, ic, ac, action=None):
 
 
 def update_image(ran):
-    white_rect = pygame.draw.rect(gameDisplay, red, (0, 0, 808, 808), 0)
-    gameDisplay.fill(white, white_rect)
+    gameDisplay.fill(white, maze_area)
     for i in range(0, 101):
         for j in range(0, 101):
             if maze.master[i][j].wall:

@@ -7,7 +7,7 @@ class Graph(object):
         self.count = 0
         self.size = size
         self.path_found = False
-        self.need_clean = True
+        self.need_clean = False
         self.master = [[None for x in range(size)] for y in range(size)]
         self.unvisited = []
         ident = 0
