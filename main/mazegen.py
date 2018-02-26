@@ -14,11 +14,7 @@ class Graph(object):
                 self.master[x][y] = Node(x, y, ident)
                 self.unvisited.append([x, y])
                 ident += 1
-    def __lt__(self, other):
-        '''if self.x == other.x:
-            return self.y < other.y
-        return self.x < other.x'''
-        return self < other
+
 
     def represent(self):
         count = 1
@@ -39,7 +35,7 @@ class Graph(object):
     def diagnose(self):
         done = True
         for x in range(101):
-            for y in range(101):
+            for y in range(10):
                 if not self.master[x][y].visited:
                     done = False
 
@@ -61,9 +57,12 @@ class Node(object):
         self.wall = False
         self.visited = False
         self.searchvisit = False
+        self.parent = []
         # A list of coordinates of it's neighbors sored in a [x, y] position
         self.neighbors = getneighbors(self)
         self.id = ident
+    def __lt__(self, other):
+        return self.f < other.f
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y

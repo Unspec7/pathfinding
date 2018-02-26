@@ -10,7 +10,7 @@ user32 = ctypes.windll.user32
 user32.SetProcessDPIAware()
 displaywidth, displayheight = int(user32.GetSystemMetrics(0)*.75), int(user32.GetSystemMetrics(1)*.75)
 gameDisplay = pygame.display.set_mode((displaywidth, displayheight), pygame.RESIZABLE)
-
+print(pygame.font.get_fonts())
 black = (0, 0, 0)
 white = (255, 255, 255)
 gray = (180, 180, 180)
@@ -110,7 +110,7 @@ def button(msg, x, y, w, h, ic, ac, action=None):
     else:
         pygame.draw.rect(gameDisplay, ic, (x, y, w, h))
 
-    smallText = pygame.font.SysFont("freesansbold", 20)
+    smallText = pygame.font.SysFont("'verdana'", 20)
     textSurf, textRect = text_objects(msg, smallText)
     textRect.center = ((x + (w / 2)), (y + (h / 2)))
     gameDisplay.blit(textSurf, textRect)
@@ -138,18 +138,25 @@ while True:
         for i in range(0, 101):
             for j in range(0, 101):
                 if maze.master[i][j].wall:
-                    pygame.draw.rect(gameDisplay, black, (i*7, j*7, 6, 6), 0)
-                if maze.master[i][j].f>0:
-                    pygame.draw.rect(gameDisplay, green, (i*7, j*7, 6, 6), 0)
+                    pygame.draw.rect(gameDisplay, black, (i*8, j*8, 7, 7), 0)
+                if maze.master[i][j].searchvisit:
+                    pygame.draw.rect(gameDisplay, green, (i*8, j*8, 7, 7), 0)
+
+                if maze.master[100][100].parent:
+                    iter = maze.master[100][100]
+                    while iter.parent:
+                        pygame.draw.rect(gameDisplay, red, (iter.x * 8, iter.y * 8, 7, 7), 0)
+                        iter = iter.parent
+
 
     for i in range(0, 25):
-        mazebutton("Map "+str(i+1), 750, 30+i*25, 80, 20, gray, green, i)
-        mazebutton("Map " + str(i+26), 850, 30 + i * 25, 80, 20, gray, green, i+25)
+        mazebutton("Map "+str(i+1), 900, 30+i*25, 80, 20, gray, green, i)
+        mazebutton("Map " + str(i+26), 1000, 30 + i * 25, 80, 20, gray, green, i+25)
 
-    button("Generate Mazes", 1000, 100, 100, 30, gray, blue, makemazes)
-    button("Load Mazes", 1000, 150, 100, 30, gray, blue, loadmazes)
-    button("Forwards A*", 1000, 400, 100, 50, red, darkred, forwardsastar)
-    button("Backwards A*", 1000, 500, 100, 50, red, darkred, backwardsastar)
+    button("Generate Mazes", 900, 700, 200, 30, gray, blue, makemazes)
+    button("Load Mazes", 900, 750, 200, 30, gray, blue, loadmazes)
+    button("Forwards A*", 1150, 400, 150, 50, red, darkred, forwardsastar)
+    button("Backwards A*", 1150, 500, 150, 50, red, darkred, backwardsastar)
 
     pygame.display.update()
     clock.tick(60)

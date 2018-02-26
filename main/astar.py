@@ -13,8 +13,9 @@ def a_star_search(graph):
     source.h = heuristic(source,sink)
     source.f = source.h
     openlist = []
+    closedlist = []
     #heappush(source, 0)
-    openlist.append(source)
+    heappush(openlist,source)
 
     parent = {}
     cost_so_far = {}
@@ -24,7 +25,9 @@ def a_star_search(graph):
 
     #while not frontier.empty():
     while len(openlist)>0:
-        current = openlist.pop()
+        sorted(openlist, key=lambda node: node.f, reverse=True)
+        current = heappop(openlist)
+        closedlist.append(current)
         current.searchvisit = True
         if current == sink:
             break
@@ -32,14 +35,13 @@ def a_star_search(graph):
             neighbor = graph.master[items[0]][items[1]]
             if neighbor.wall:
                 continue
-            neighbor.h = heuristic(neighbor, sink)
-            neighbor.g += 1
-            neighbor.f = neighbor.g+neighbor.h
-
-            if not neighbor.searchvisit:
-                openlist.append(neighbor)
-        sorted(openlist, key=lambda node: node.f)
-
+            if neighbor not in closedlist and neighbor not in openlist:
+                neighbor.parent = current
+                neighbor.h = heuristic(neighbor, sink)
+                neighbor.g = current.g+1
+                neighbor.f = neighbor.g+neighbor.h
+                heappush(openlist, neighbor)
+                heappush(openlist, neighbor)
     return graph
 
 def a_star_backwards(graph, source, sink):
