@@ -9,6 +9,12 @@ pygame.init()
 user32 = ctypes.windll.user32
 user32.SetProcessDPIAware()
 displaywidth, displayheight = int(user32.GetSystemMetrics(0)*.75), int(user32.GetSystemMetrics(1)*.75)
+
+# Ensure game screen is big enough
+if displaywidth < 1440 or displayheight < 810:
+    displaywidth = 1440
+    displayheight = 810
+
 gameDisplay = pygame.display.set_mode((displaywidth, displayheight))
 print(pygame.font.get_fonts())
 black = (0, 0, 0)
@@ -139,7 +145,8 @@ def button(msg, x, y, w, h, ic, ac, action=None):
 
 
 def update_image(ran):
-    gameDisplay.fill(white)
+    white_rect = pygame.draw.rect(gameDisplay, red, (0, 0, 808, 808), 0)
+    gameDisplay.fill(white, white_rect)
     for i in range(0, 101):
         for j in range(0, 101):
 
@@ -187,24 +194,6 @@ while True:
     if done:
         break
 
-    """if maze:
-        for i in range(0, 101):
-            for j in range(0, 101):
-                if i == 0 and j == 0:
-                    pygame.draw.rect(gameDisplay, blue, (i * 8, j * 8, 7, 7), 0)
-                elif i == 100 and j == 100:
-                    pygame.draw.rect(gameDisplay, gray, (i * 8, j * 8, 7, 7), 0)
-
-                if maze.master[i][j].wall:
-                    pygame.draw.rect(gameDisplay, black, (i*8, j*8, 7, 7), 0)
-                elif maze.master[i][j].searchvisit and ((i == 100 and j == 100) or (i == 0 and j == 0)):
-                    pygame.draw.rect(gameDisplay, green, (i*8, j*8, 7, 7), 0)
-
-                if maze.master[100][100].parent:
-                    iter = maze.master[100][100]
-                    while iter.parent:
-                        pygame.draw.rect(gameDisplay, red, (iter.x * 8, iter.y * 8, 7, 7), 0)
-                        iter = iter.parent"""
     draw_buttons()
 
     pygame.display.update()
