@@ -18,7 +18,7 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 darkred = (180, 0, 0)
-
+sink = []
 maze = []
 
 mazes = []
@@ -33,6 +33,8 @@ def forwardsastar():
     a_star_search(maze)
     if maze.path_found is False:
         pygame.display.set_caption('Maze(No possible path)')
+    global sink
+    sink = maze.master[100][100]
     update_image(maze.path_found)
 
 
@@ -41,6 +43,8 @@ def backwardsastar():
     a_star_backwards(maze)
     if maze.path_found is False:
         pygame.display.set_caption('Maze(No possible path)')
+    global sink
+    sink = maze.master[0][0]
     update_image(maze.path_found)
 
 
@@ -138,9 +142,9 @@ def update_image(ran):
             if ran:
                 if maze.master[i][j].searchvisit:
                     pygame.draw.rect(gameDisplay, green, (i * 8, j * 8, 7, 7), 0)
-
-                if maze.master[100][100].parent:
-                    iter = maze.master[100][100]
+                global sink
+                if sink:
+                    iter = sink
                     while iter.parent:
                         pygame.draw.rect(gameDisplay, red, (iter.x * 8, iter.y * 8, 7, 7), 0)
                         iter = iter.parent
