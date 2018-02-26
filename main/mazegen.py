@@ -9,11 +9,12 @@ class Graph(object):
         self.size = size
         self.master = [[None for x in range(size)] for y in range(size)]
         self.unvisited = []
-
+        ident = 0
         for x in range(size):
             for y in range(size):
-                self.master[x][y] = Node(x, y)
+                self.master[x][y] = Node(x, y, ident)
                 self.unvisited.append([x, y])
+                ident += 1
 
     def represent(self):
         count = 1
@@ -47,7 +48,7 @@ class Graph(object):
 
 
 class Node(object):
-    def __init__(self, x, y):
+    def __init__(self, x, y, ident):
         self.x = x
         self.y = y
         self.g = 0
@@ -57,6 +58,7 @@ class Node(object):
         self.visited = False
         # A list of coordinates of it's neighbors sored in a [x, y] position
         self.neighbors = getneighbors(self)
+        self.id = ident
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
