@@ -17,7 +17,6 @@ class Graph(object):
                 self.unvisited.append([x, y])
                 ident += 1
 
-
     def represent(self):
         count = 1
         for x in range(self.size):
