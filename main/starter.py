@@ -9,7 +9,7 @@ pygame.init()
 user32 = ctypes.windll.user32
 user32.SetProcessDPIAware()
 displaywidth, displayheight = int(user32.GetSystemMetrics(0)*.75), int(user32.GetSystemMetrics(1)*.75)
-gameDisplay = pygame.display.set_mode((displaywidth, displayheight), pygame.RESIZABLE)
+gameDisplay = pygame.display.set_mode((displaywidth, displayheight))
 print(pygame.font.get_fonts())
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -18,21 +18,30 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 darkred = (180, 0, 0)
+
 maze = []
 
 mazes = []
 
 pygame.display.set_caption('Maze')
+
 clock = pygame.time.Clock()
+
 
 def forwardsastar():
     global maze
     a_star_search(maze)
-    print("do the thing")
+    if maze.path_found is False:
+        pygame.display.set_caption('Maze(No possible path)')
+    update_image(maze.path_found)
 
 
 def backwardsastar():
-    print("do the other thing")
+    global maze
+    a_star_backwards(maze)
+    if maze.path_found is False:
+        pygame.display.set_caption('Maze(No possible path)')
+    update_image(maze.path_found)
 
 
 def setmaze(maze_number):
@@ -42,6 +51,7 @@ def setmaze(maze_number):
         global maze
         maze = mazes[maze_number]
         pygame.display.set_caption('Maze(Maze number ' + str(maze_number + 1) + ')')
+        update_image(maze.path_found)
     else:
         pygame.display.set_caption('Maze(No mazes available)')
 
@@ -116,31 +126,18 @@ def button(msg, x, y, w, h, ic, ac, action=None):
     gameDisplay.blit(textSurf, textRect)
 
 
-while True:
-    done = False
-    mouse = pygame.mouse.get_pos()
+def update_image(ran):
     gameDisplay.fill(white)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                done = True
-        elif event.type == pygame.VIDEORESIZE:
-            gameDisplay = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-            gameDisplay.fill(white)
-            pygame.display.update()
+    for i in range(0, 101):
+        for j in range(0, 101):
 
-    if done:
-        break
+            if maze.master[i][j].wall:
+                pygame.draw.rect(gameDisplay, black, (i * 8, j * 8, 7, 7), 0)
 
-    if maze:
-        for i in range(0, 101):
-            for j in range(0, 101):
-                if maze.master[i][j].wall:
-                    pygame.draw.rect(gameDisplay, black, (i*8, j*8, 7, 7), 0)
+            # Only draw this stuff if we ran the thing
+            if ran:
                 if maze.master[i][j].searchvisit:
-                    pygame.draw.rect(gameDisplay, green, (i*8, j*8, 7, 7), 0)
+                    pygame.draw.rect(gameDisplay, green, (i * 8, j * 8, 7, 7), 0)
 
                 if maze.master[100][100].parent:
                     iter = maze.master[100][100]
@@ -148,15 +145,55 @@ while True:
                         pygame.draw.rect(gameDisplay, red, (iter.x * 8, iter.y * 8, 7, 7), 0)
                         iter = iter.parent
 
+            if i == 0 and j == 0:
+                pygame.draw.rect(gameDisplay, blue, (i * 8, j * 8, 7, 7), 0)
+            elif i == 100 and j == 100:
+                pygame.draw.rect(gameDisplay, gray, (i * 8, j * 8, 7, 7), 0)
 
+
+def draw_buttons():
     for i in range(0, 25):
-        mazebutton("Map "+str(i+1), 900, 30+i*25, 80, 20, gray, green, i)
+        mazebutton("Map " + str(i+1), 900, 30+i*25, 80, 20, gray, green, i)
         mazebutton("Map " + str(i+26), 1000, 30 + i * 25, 80, 20, gray, green, i+25)
 
     button("Generate Mazes", 900, 700, 200, 30, gray, blue, makemazes)
     button("Load Mazes", 900, 750, 200, 30, gray, blue, loadmazes)
     button("Forwards A*", 1150, 400, 150, 50, red, darkred, forwardsastar)
     button("Backwards A*", 1150, 500, 150, 50, red, darkred, backwardsastar)
+
+gameDisplay.fill(white)
+while True:
+    done = False
+    mouse = pygame.mouse.get_pos()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                done = True
+
+    if done:
+        break
+
+    """if maze:
+        for i in range(0, 101):
+            for j in range(0, 101):
+                if i == 0 and j == 0:
+                    pygame.draw.rect(gameDisplay, blue, (i * 8, j * 8, 7, 7), 0)
+                elif i == 100 and j == 100:
+                    pygame.draw.rect(gameDisplay, gray, (i * 8, j * 8, 7, 7), 0)
+
+                if maze.master[i][j].wall:
+                    pygame.draw.rect(gameDisplay, black, (i*8, j*8, 7, 7), 0)
+                elif maze.master[i][j].searchvisit and ((i == 100 and j == 100) or (i == 0 and j == 0)):
+                    pygame.draw.rect(gameDisplay, green, (i*8, j*8, 7, 7), 0)
+
+                if maze.master[100][100].parent:
+                    iter = maze.master[100][100]
+                    while iter.parent:
+                        pygame.draw.rect(gameDisplay, red, (iter.x * 8, iter.y * 8, 7, 7), 0)
+                        iter = iter.parent"""
+    draw_buttons()
 
     pygame.display.update()
     clock.tick(60)

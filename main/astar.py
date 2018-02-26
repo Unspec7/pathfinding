@@ -8,14 +8,15 @@ def heuristic(curr, goal):
 
 
 def a_star_search(graph):
+    graph.path_found = True
     source = graph.master[0][0]
     sink = graph.master[100][100]
-    source.h = heuristic(source,sink)
+    source.h = heuristic(source, sink)
     source.f = source.h
     openlist = []
     closedlist = []
-    #heappush(source, 0)
-    heappush(openlist,source)
+    # heappush(source, 0)
+    heappush(openlist, source)
 
     parent = {}
     cost_so_far = {}
@@ -23,8 +24,9 @@ def a_star_search(graph):
     cost_so_far[source.id] = 0
     count = 0
 
-    #while not frontier.empty():
-    while len(openlist)>0:
+    # While not frontier.empty():
+    while len(openlist) > 0:
+        count += 1
         sorted(openlist, key=lambda node: node.f, reverse=True)
         current = heappop(openlist)
         closedlist.append(current)
@@ -42,32 +44,50 @@ def a_star_search(graph):
                 neighbor.f = neighbor.g+neighbor.h
                 heappush(openlist, neighbor)
                 heappush(openlist, neighbor)
+    print("Nodes expanded: " + str(count))
+    if sink.searchvisit is not True:
+        graph.path_found = False
     return graph
 
-def a_star_backwards(graph, source, sink):
-    frontier = []
-    heappush(sink, 0)
+
+def a_star_backwards(graph):
+    graph.path_found = True
+    source = graph.master[100][100]
+    sink = graph.master[0][0]
+    source.h = heuristic(source, sink)
+    source.f = source.h
+    openlist = []
+    closedlist = []
+    # heappush(source, 0)
+    heappush(openlist, source)
+
     parent = {}
     cost_so_far = {}
-    parent[sink] = None
-    cost_so_far[sink] = 0
+    parent[source.id] = None
+    cost_so_far[source.id] = 0
+    count = 0
 
-    while not frontier.empty():
-        current = frontier.get()
-
-        if current == source:
+    # While not frontier.empty():
+    while len(openlist) > 0:
+        count += 1
+        sorted(openlist, key=lambda node: node.f, reverse=True)
+        current = heappop(openlist)
+        closedlist.append(current)
+        current.searchvisit = True
+        if current == sink:
             break
-        if not graph.neighbors(current):
-            break
-
-        for next in graph.neighbors(current):
-            new_cost = cost_so_far[current] + graph.cost(current, next)
-            if next not in cost_so_far or new_cost < cost_so_far[next]:
-                cost_so_far[next] = new_cost
-                #priority = new_cost + heuristic(source, next)
-                #priority = new_cost + heuristic(sink, next)
-                priority = new_cost
-                frontier.put(next, priority)
-                parent[next] = current
-
-    return parent, cost_so_far
+        for items in current.neighbors:
+            neighbor = graph.master[items[0]][items[1]]
+            if neighbor.wall:
+                continue
+            if neighbor not in closedlist and neighbor not in openlist:
+                neighbor.parent = current
+                neighbor.h = heuristic(neighbor, sink)
+                neighbor.g = current.g + 1
+                neighbor.f = neighbor.g + neighbor.h
+                heappush(openlist, neighbor)
+                heappush(openlist, neighbor)
+    print("Nodes expanded: " + str(count))
+    if sink.searchvisit is not True:
+        graph.path_found = False
+    return graph

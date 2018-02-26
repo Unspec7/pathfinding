@@ -6,6 +6,7 @@ class Graph(object):
     def __init__(self, size):
         self.count = 0
         self.size = size
+        self.path_found = False
         self.master = [[None for x in range(size)] for y in range(size)]
         self.unvisited = []
         ident = 0
@@ -190,11 +191,12 @@ def DFSMaze(graph):
         DFSstack.append(curr)
 """
 
-
+"""
 my_graph = Graph(101)
 generatemaze(my_graph)
 my_graph.represent()
 my_graph.diagnose()
+"""
 
 
 
