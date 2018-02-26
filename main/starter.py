@@ -33,23 +33,23 @@ def backwardsastar():
     print("do the other thing")
 
 
-def setmaze(i):
-    print("Maze set to maze number "+str(i+1))
+def setmaze(maze_number):
+    print("Maze set to maze number " + str(maze_number + 1))
     global mazes
     if mazes:
         global maze
-        maze = mazes[i]
+        maze = mazes[maze_number]
 
 
 def makemazes():
     global mazes
     mazes = []
     pygame.display.set_caption('Maze(Generating)')
-    for i in range(0, 50):
-        my_graph = Graph(101)
-        generatemaze(my_graph)
-        mazes.append(my_graph)
-        print("Maze " + str(i+1) + " done")
+    for x in range(0, 50):
+        graph = Graph(101)
+        generatemaze(graph)
+        mazes.append(graph)
+        print("Maze " + str(x + 1) + " done")
 
     setmaze(0)
     print("Done generating 50 mazes")
@@ -60,12 +60,12 @@ def makemazes():
 
 
 def mazebutton(msg, x, y, w, h, ic, ac, action=None):
-    mouse = pygame.mouse.get_pos()
+    maze_mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
-    if x + w > mouse[0] > x and y + h > mouse[1] > y:
+    if x + w > maze_mouse[0] > x and y + h > maze_mouse[1] > y:
         pygame.draw.rect(gameDisplay, ac, (x, y, w, h))
 
-        if click[0] == 1 and action != None:
+        if click[0] == 1 and action is not None:
             setmaze(action)
             time.sleep(.5)
     else:
@@ -94,9 +94,9 @@ def loadmazes():
 
 
 def button(msg, x, y, w, h, ic, ac, action=None):
-    mouse = pygame.mouse.get_pos()
+    button_mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
-    if x + w > mouse[0] > x and y + h > mouse[1] > y:
+    if x + w > button_mouse[0] > x and y + h > button_mouse[1] > y:
         pygame.draw.rect(gameDisplay, ac, (x, y, w, h))
 
         if click[0] == 1 and action != None:
@@ -110,8 +110,9 @@ def button(msg, x, y, w, h, ic, ac, action=None):
     textRect.center = ((x + (w / 2)), (y + (h / 2)))
     gameDisplay.blit(textSurf, textRect)
 
-done = False
+
 while True:
+    done = False
     mouse = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
