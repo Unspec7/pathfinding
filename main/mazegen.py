@@ -7,7 +7,7 @@ class Graph(object):
         self.count = 0
         self.size = size
         self.path_found = False
-        self.clean = True
+        self.need_clean = True
         self.master = [[None for x in range(size)] for y in range(size)]
         self.unvisited = []
         ident = 0
@@ -32,6 +32,13 @@ class Graph(object):
                     elif self.master[x][y].wall is True:
                         print("X")
                 count += 1
+
+    def clean(self):
+        if self.clean is False:
+            for x in range(self.size):
+                for y in range(self.size):
+                    self.master.searchvisit = False
+                    self.master.parent = []
 
     def diagnose(self):
         done = True

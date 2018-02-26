@@ -30,7 +30,11 @@ clock = pygame.time.Clock()
 
 def forwardsastar():
     global maze
-    a_star_search(maze)
+    if maze.need_clean:
+        a_star_search(maze)
+    else:
+        maze.clean()
+        a_star_search(maze)
     if maze.path_found is False:
         pygame.display.set_caption('Maze(No possible path)')
     global sink
@@ -40,7 +44,11 @@ def forwardsastar():
 
 def backwardsastar():
     global maze
-    a_star_backwards(maze)
+    if maze.need_clean:
+        a_star_backwards(maze)
+    else:
+        maze.clean()
+        a_star_backwards(maze)
     if maze.path_found is False:
         pygame.display.set_caption('Maze(No possible path)')
     global sink
