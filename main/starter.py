@@ -1,12 +1,14 @@
-import pygame
-import sys
-import pickle
-from mazegen import *
+import os
 import time
+
+import pygame
+
+from mazegen import *
 
 pygame.init()
 displaywidth = 1280
 displayheight = 720
+gameDisplay = pygame.display.set_mode((displaywidth, displayheight))
 
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -19,7 +21,6 @@ maze = []
 
 mazes = []
 
-gameDisplay = pygame.display.set_mode((displaywidth, displayheight))
 pygame.display.set_caption('Maze')
 clock = pygame.time.Clock()
 
@@ -82,9 +83,14 @@ def text_objects(text, font):
 
 
 def loadmazes():
-    pickle_in = open("mazes.dat", "rb")
-    global mazes
-    mazes = pickle.load(pickle_in)
+    try:
+        pickle_in = open("mazes.dat", "rb")
+        global mazes
+        mazes = pickle.load(pickle_in)
+        pygame.display.set_caption('Maze(Mazes loaded)')
+        setmaze(0)
+    except FileNotFoundError:
+        pygame.display.set_caption('Maze(No mazes to load)')
 
 
 def button(msg, x, y, w, h, ic, ac, action=None):
@@ -104,17 +110,18 @@ def button(msg, x, y, w, h, ic, ac, action=None):
     textRect.center = ((x + (w / 2)), (y + (h / 2)))
     gameDisplay.blit(textSurf, textRect)
 
-
+done = False
 while True:
     mouse = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+            done = True
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                pygame.quit()
-                sys.exit()
+                done = True
+
+    if done:
+        break
 
     gameDisplay.fill(white)
     if maze:
@@ -134,3 +141,6 @@ while True:
 
     pygame.display.update()
     clock.tick(60)
+
+pygame.quit()
+os._exit(0)
