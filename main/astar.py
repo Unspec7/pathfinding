@@ -4,8 +4,8 @@ from heapq import *
 def heuristic(graph):
     for i in range(0, 11):
         for j in range(0, 11):
-            x = graph.master[i][j].x-graph.master[10][10].x
-            y = graph.master[i][j].y - graph.master[10][10].y
+            x = graph.master[i][j].x-graph.master[100][100].x
+            y = graph.master[i][j].y - graph.master[100][100].y
             graph.master[i][j].h = abs(x)+abs(y)
 
 def computepath(graph, openlist, closedlist, count):
@@ -13,7 +13,7 @@ def computepath(graph, openlist, closedlist, count):
     s.f = s.g + s.h
     heappush(closedlist, s)
     graph.master[s.x][s.y].searchval = count
-    while graph.master[10][10].g > s.f:
+    while graph.master[100][100].g > s.f:
         for actions in s.neighbors:
             successor = graph.master[actions[0]][actions[1]]
             if successor.searchval < count:
@@ -45,7 +45,7 @@ def computepath(graph, openlist, closedlist, count):
 def search(graph):
     heuristic(graph)
     source = graph.master[0][0]
-    sink = graph.master[10][10]
+    sink = graph.master[100][100]
     curr = source
     count = 0
     while curr.x != sink.x and curr.y != sink.y:
