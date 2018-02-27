@@ -97,8 +97,8 @@ def makemazes():
     global mazes
     mazes = []
     pygame.display.set_caption('Maze(Generating)')
-    gameDisplay.fill(white, maze_area)
-    for x in range(0, 50):
+    for x in range(0, 1):
+    # for x in range(0, 50):
         # So it doesn't go into not responding mode
         pygame.event.get()
         graph = Graph(101)
@@ -106,8 +106,8 @@ def makemazes():
         mazes.append(graph)
         pygame.display.set_caption("Maze(Generating maze number " + str(x + 1) + " )")
 
-    setmaze(0)
     pygame.display.set_caption('Maze(Mazes generated)')
+    setmaze(0)
     pickle_out = open("mazes.dat", "wb")
     pickle.dump(mazes, pickle_out)
     pickle_out.close()

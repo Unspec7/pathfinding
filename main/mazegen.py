@@ -57,7 +57,6 @@ class Graph(object):
         print("Ran " + str(self.count) + " times")
 
 
-
 class Node(object):
     def __init__(self, x, y, ident):
         self.x = x
@@ -72,8 +71,16 @@ class Node(object):
         # A list of coordinates of it's neighbors sored in a [x, y] position
         self.neighbors = getneighbors(self)
         self.id = ident
+
     def __lt__(self, other):
-        return self.f < other.f
+        if self.f == other.f:
+            if self.g == other.g:
+                return random.choice([self, other])
+            else:
+                return self.g > other.g
+
+        else:
+            return self.f < other.f
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y

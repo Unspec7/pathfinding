@@ -35,7 +35,7 @@ def a_star_search(graph):
             if not neighbor.searchvisit and neighbor not in openlist:
                 neighbor.parent = current
                 neighbor.h = heuristic(neighbor, sink)
-                neighbor.g = current.g+1
+                neighbor.g = current.g + 1
                 neighbor.f = neighbor.g+neighbor.h
                 heappush(openlist, neighbor)
 
@@ -71,8 +71,7 @@ def a_star_backwards(graph):
                 neighbor.parent = current
                 neighbor.h = heuristic(neighbor, sink)
                 neighbor.g = current.g+1
-                neighbor.f = neighbor.g+neighbor.h
-                heappush(openlist, neighbor)
+                neighbor.f = neighbor.g + neighbor.h
                 heappush(openlist, neighbor)
 
     print("Nodes expanded: " + str(count))
