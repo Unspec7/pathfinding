@@ -39,10 +39,12 @@ def forwardsastar():
     if maze:
         pygame.display.set_caption('Maze(Running forward A*)')
         if maze.need_clean:
-            a_star_search(maze)
+            search(maze)
+            #a_star_search(maze)
         else:
+            search(maze)
             maze.clean()
-            a_star_search(maze)
+            #a_star_search(maze)
         if maze.path_found is False:
             pygame.display.set_caption('Maze(No possible path)')
         else:

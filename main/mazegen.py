@@ -62,12 +62,14 @@ class Node(object):
     def __init__(self, x, y, ident):
         self.x = x
         self.y = y
-        self.g = 0
+        self.g = 99999999999
         self.h = 0
         self.f = self.g + self.h
+        self.ac = 1
         self.wall = False
         self.visited = False
         self.searchvisit = False
+        self.searchval = -1
         self.parent = []
         # A list of coordinates of it's neighbors sored in a [x, y] position
         self.neighbors = getneighbors(self)
