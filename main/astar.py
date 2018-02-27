@@ -33,6 +33,9 @@ def computepath(graph, openlist, closedlist, count):
                 heappush(openlist, successor)
         if len(openlist)>0:
             s = heappop(openlist)
+            while s in closedlist:
+                if len(openlist) > 0:
+                    s = heappop(openlist)
             s.f = s.g + s.h
             heappush(closedlist, s)
             graph.master[s.x][s.y].searchval = count
@@ -76,6 +79,7 @@ def search(graph):
                 nextmove.ac = 99999999999
                 break
     print("found path")
+    graph.path_found = True
 
 def a_star_search(graph):
     graph.need_clean = True
