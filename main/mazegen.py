@@ -21,7 +21,7 @@ class Graph(object):
         count = 1
         for x in range(self.size):
             for y in range(self.size):
-                if count % 101 != 0:
+                if count % 11 != 0:
                     if self.master[x][y].wall is False:
                         print("O", end="")
                     elif self.master[x][y].wall is True:
@@ -45,8 +45,8 @@ class Graph(object):
 
     def diagnose(self):
         done = True
-        for x in range(101):
-            for y in range(10):
+        for x in range(11):
+            for y in range(1):
                 if not self.master[x][y].visited:
                     done = False
 
@@ -98,7 +98,7 @@ def getneighbors(node):
     result = []
     for direct in direction:
         neighbor = [node.x + direct[0], node.y + direct[1]]
-        if 0 <= neighbor[0] < 101 and 0 <= neighbor[1] < 101:
+        if 0 <= neighbor[0] < 11 and 0 <= neighbor[1] < 11:
             result.append(neighbor)
     return result
 
@@ -125,10 +125,10 @@ def entrance_exit_generation(graph):
     graph.master[1][0].wall = False
     graph.master[0][1].wall = False
     graph.master[1][1].wall = False
-    graph.master[100][100].wall = False
-    graph.master[100][99].wall = False
-    graph.master[99][100].wall = False
-    graph.master[99][99].wall = False
+    graph.master[10][10].wall = False
+    graph.master[10][9].wall = False
+    graph.master[9][10].wall = False
+    graph.master[9][9].wall = False
 
 
 def graph2maze(stack, graph):

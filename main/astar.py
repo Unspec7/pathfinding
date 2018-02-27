@@ -2,10 +2,10 @@ from heapq import *
 
 
 def heuristic(graph):
-    for i in range(0, 101):
-        for j in range(0, 101):
-            x = graph.master[i][j].x-graph.master[100][100].x
-            y = graph.master[i][j].y - graph.master[100][100].y
+    for i in range(0, 11):
+        for j in range(0, 11):
+            x = graph.master[i][j].x-graph.master[10][10].x
+            y = graph.master[i][j].y - graph.master[10][10].y
             graph.master[i][j].h = abs(x)+abs(y)
 
 def computepath(graph, openlist, closedlist, count):
@@ -13,7 +13,7 @@ def computepath(graph, openlist, closedlist, count):
     s.f = s.g + s.h
     heappush(closedlist, s)
     graph.master[s.x][s.y].searchval = count
-    while graph.master[100][100].g > s.f:
+    while graph.master[10][10].g > s.f:
         for actions in s.neighbors:
             successor = graph.master[actions[0]][actions[1]]
             if successor.searchval < count:
@@ -42,7 +42,7 @@ def computepath(graph, openlist, closedlist, count):
 def search(graph):
     heuristic(graph)
     source = graph.master[0][0]
-    sink = graph.master[100][100]
+    sink = graph.master[10][10]
     curr = source
     count = 0
     while curr.x != sink.x and curr.y != sink.y:
@@ -68,18 +68,20 @@ def search(graph):
         while iter.parent != curr:
             path.append(iter)
             iter = iter.parent
-        if path:
+        while path:
             nextmove = path.pop()
-            while not nextmove.wall:
+            if not nextmove.wall:
                 curr = nextmove
-                nextmove = path.pop()
-
+            if nextmove.wall:
+                nextmove.ac = 99999999999
+                break
+    print("found path")
 
 def a_star_search(graph):
     graph.need_clean = True
     graph.path_found = False
     source = graph.master[0][0]
-    sink = graph.master[100][100]
+    sink = graph.master[10][10]
     source.h = heuristic(source, sink)
     source.f = source.h
     openlist = []
@@ -116,7 +118,7 @@ def a_star_search(graph):
 def a_star_backwards(graph):
     graph.need_clean = True
     graph.path_found = False
-    source = graph.master[100][100]
+    source = graph.master[10][10]
     sink = graph.master[0][0]
     source.h = heuristic(source, sink)
     source.f = source.h
@@ -152,7 +154,7 @@ def adaptive_a_star_search(graph):
     graph.need_clean = True
     graph.path_found = False
     source = graph.master[0][0]
-    sink = graph.master[100][100]
+    sink = graph.master[10][10]
     source.h = heuristic(source, sink)
     source.f = source.h
     openlist = []
