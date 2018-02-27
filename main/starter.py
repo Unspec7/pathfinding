@@ -16,6 +16,7 @@ if displaywidth < 1440 or displayheight < 810:
     displayheight = 810
 
 gameDisplay = pygame.display.set_mode((displaywidth, displayheight))
+
 print(pygame.font.get_fonts())
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -24,12 +25,12 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 darkred = (180, 0, 0)
+maze_area = pygame.draw.rect(gameDisplay, red, (0, 0, 808, 808), 0)
 sink = []
 maze = []
-
 mazes = []
 
-pygame.display.set_caption('Maze')
+pygame.display.set_caption('Maze(No mazes loaded)')
 
 clock = pygame.time.Clock()
 
@@ -41,10 +42,15 @@ def forwardsastar():
         if maze.need_clean:
             search(maze)
             #a_star_search(maze)
+            print("Cleaning")
+            maze.clean()
+            a_star_search(maze)
         else:
             search(maze)
             maze.clean()
             #a_star_search(maze)
+            print("Didn't need cleaning")
+            a_star_search(maze)
         if maze.path_found is False:
             pygame.display.set_caption('Maze(No possible path)')
         else:
@@ -52,6 +58,7 @@ def forwardsastar():
             sink = maze.master[100][100]
             pygame.display.set_caption('Maze(Path found, updating display...)')
             update_image(maze.path_found)
+            pygame.display.set_caption('Maze(Path found)')
     else:
         pygame.display.set_caption('Maze(No mazes available)')
 
@@ -61,9 +68,11 @@ def backwardsastar():
     if mazes:
         pygame.display.set_caption('Maze(Running reverse A*)')
         if maze.need_clean:
+            print("Cleaning")
+            maze.clean()
             a_star_backwards(maze)
         else:
-            maze.clean()
+            print("Didn't need cleaning")
             a_star_backwards(maze)
         if maze.path_found is False:
             pygame.display.set_caption('Maze(No possible path)')
@@ -72,18 +81,19 @@ def backwardsastar():
             sink = maze.master[0][0]
             pygame.display.set_caption('Maze(Path found, updating display...)')
             update_image(maze.path_found)
+            pygame.display.set_caption('Maze(Path found)')
     else:
         pygame.display.set_caption('Maze(No mazes available)')
 
 
 def setmaze(maze_number):
-    print("Maze set to maze number " + str(maze_number + 1))
     global mazes
     if mazes:
         global maze
         maze = mazes[maze_number]
-        pygame.display.set_caption('Maze(Maze number ' + str(maze_number + 1) + ')')
+        pygame.display.set_caption('Maze(Updating display...)')
         update_image(maze.path_found)
+        pygame.display.set_caption('Maze(Maze number ' + str(maze_number + 1) + ')')
     else:
         pygame.display.set_caption('Maze(No mazes available)')
 
@@ -92,7 +102,8 @@ def makemazes():
     global mazes
     mazes = []
     pygame.display.set_caption('Maze(Generating)')
-    for x in range(0, 50):
+    for x in range(0, 1):
+    # for x in range(0, 50):
         # So it doesn't go into not responding mode
         pygame.event.get()
         graph = Graph(101)
@@ -100,8 +111,8 @@ def makemazes():
         mazes.append(graph)
         pygame.display.set_caption("Maze(Generating maze number " + str(x + 1) + " )")
 
-    setmaze(0)
     pygame.display.set_caption('Maze(Mazes generated)')
+    setmaze(0)
     pickle_out = open("mazes.dat", "wb")
     pickle.dump(mazes, pickle_out)
     pickle_out.close()
@@ -131,6 +142,7 @@ def text_objects(text, font):
 
 
 def loadmazes():
+    pygame.display.set_caption('Maze(Loading mazes...)')
     try:
         pickle_in = open("mazes.dat", "rb")
         global mazes
@@ -160,8 +172,7 @@ def button(msg, x, y, w, h, ic, ac, action=None):
 
 
 def update_image(ran):
-    white_rect = pygame.draw.rect(gameDisplay, red, (0, 0, 808, 808), 0)
-    gameDisplay.fill(white, white_rect)
+    gameDisplay.fill(white, maze_area)
     for i in range(0, 101):
         for j in range(0, 101):
             if maze.master[i][j].wall:

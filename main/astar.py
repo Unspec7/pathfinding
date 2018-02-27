@@ -76,10 +76,10 @@ def search(graph):
 
 
 def a_star_search(graph):
-    graph.clean = False
+    graph.need_clean = True
+    graph.path_found = False
     source = graph.master[0][0]
     sink = graph.master[100][100]
-    heuristic(graph)
     source.h = heuristic(source, sink)
     source.f = source.h
     openlist = []
@@ -102,7 +102,8 @@ def a_star_search(graph):
 
             if not neighbor.searchvisit and neighbor not in openlist:
                 neighbor.parent = current
-                neighbor.g = current.g+1
+                neighbor.h = heuristic(neighbor, sink)
+                neighbor.g = current.g + 1
                 neighbor.f = neighbor.g+neighbor.h
                 heappush(openlist, neighbor)
 
@@ -113,7 +114,8 @@ def a_star_search(graph):
 
 
 def a_star_backwards(graph):
-    graph.clean = False
+    graph.need_clean = True
+    graph.path_found = False
     source = graph.master[100][100]
     sink = graph.master[0][0]
     source.h = heuristic(source, sink)
@@ -137,8 +139,7 @@ def a_star_backwards(graph):
                 neighbor.parent = current
                 neighbor.h = heuristic(neighbor, sink)
                 neighbor.g = current.g+1
-                neighbor.f = neighbor.g+neighbor.h
-                heappush(openlist, neighbor)
+                neighbor.f = neighbor.g + neighbor.h
                 heappush(openlist, neighbor)
 
     print("Nodes expanded: " + str(count))
@@ -146,8 +147,10 @@ def a_star_backwards(graph):
         graph.path_found = False
     return graph
 
+
 def adaptive_a_star_search(graph):
-    graph.clean = False
+    graph.need_clean = True
+    graph.path_found = False
     source = graph.master[0][0]
     sink = graph.master[100][100]
     source.h = heuristic(source, sink)
