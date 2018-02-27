@@ -47,6 +47,7 @@ def forwardsastar():
             #a_star_search(maze)
         else:
             maze.clean()
+            #a_star_search(maze)
             print("Didn't need cleaning")
             search(maze)
             #a_star_search(maze)
@@ -54,7 +55,7 @@ def forwardsastar():
             pygame.display.set_caption('Maze(No possible path)')
         else:
             global sink
-            sink = maze.master[10][10]
+            sink = maze.master[100][100]
             pygame.display.set_caption('Maze(Path found, updating display...)')
             update_image(maze.path_found)
             pygame.display.set_caption('Maze(Path found)')
@@ -101,11 +102,10 @@ def makemazes():
     global mazes
     mazes = []
     pygame.display.set_caption('Maze(Generating)')
-    for x in range(0, 1):
-    # for x in range(0, 50):
+    for x in range(0, 50):
         # So it doesn't go into not responding mode
         pygame.event.get()
-        graph = Graph(11)
+        graph = Graph(101)
         generatemaze(graph)
         mazes.append(graph)
         pygame.display.set_caption("Maze(Generating maze number " + str(x + 1) + " )")
@@ -172,8 +172,8 @@ def button(msg, x, y, w, h, ic, ac, action=None):
 
 def update_image(ran):
     gameDisplay.fill(white, maze_area)
-    for i in range(0, 11):
-        for j in range(0, 11):
+    for i in range(0, 101):
+        for j in range(0, 101):
             if maze.master[i][j].wall:
                 pygame.draw.rect(gameDisplay, black, (i * 8, j * 8, 7, 7), 0)
 
@@ -190,7 +190,7 @@ def update_image(ran):
 
             if i == 0 and j == 0:
                 pygame.draw.rect(gameDisplay, blue, (i * 8, j * 8, 7, 7), 0)
-            elif i == 10 and j == 10:
+            elif i == 100 and j == 100:
                 pygame.draw.rect(gameDisplay, gray, (i * 8, j * 8, 7, 7), 0)
 
 
