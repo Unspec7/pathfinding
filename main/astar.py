@@ -2,8 +2,8 @@ from heapq import *
 
 
 def heuristic(graph):
-    for i in range(0, 11):
-        for j in range(0, 11):
+    for i in range(0, 101):
+        for j in range(0, 101):
             x = graph.master[i][j].x-graph.master[100][100].x
             y = graph.master[i][j].y - graph.master[100][100].y
             graph.master[i][j].h = abs(x)+abs(y)
@@ -122,7 +122,7 @@ def a_star_search(graph):
 def a_star_backwards(graph):
     graph.need_clean = True
     graph.path_found = False
-    source = graph.master[10][10]
+    source = graph.master[100][100]
     sink = graph.master[0][0]
     source.h = heuristic(source, sink)
     source.f = source.h
@@ -158,7 +158,7 @@ def adaptive_a_star_search(graph):
     graph.need_clean = True
     graph.path_found = False
     source = graph.master[0][0]
-    sink = graph.master[10][10]
+    sink = graph.master[100][100]
     source.h = heuristic(source, sink)
     source.f = source.h
     openlist = []
