@@ -8,6 +8,7 @@ def heuristic(graph):
             y = graph.master[i][j].y - graph.master[100][100].y
             graph.master[i][j].h = abs(x)+abs(y)
 
+
 def computepath(graph, openlist, closedlist, count):
     s = heappop(openlist)
     s.f = s.g + s.h
@@ -41,6 +42,7 @@ def computepath(graph, openlist, closedlist, count):
             graph.master[s.x][s.y].searchval = count
 
     return graph, openlist, closedlist
+
 
 def search(graph):
     heuristic(graph)
@@ -80,6 +82,7 @@ def search(graph):
                 break
     print("found path")
     graph.path_found = True
+
 
 def a_star_search(graph):
     graph.need_clean = True
